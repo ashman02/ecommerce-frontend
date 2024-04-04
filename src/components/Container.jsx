@@ -1,0 +1,11 @@
+import React from 'react'
+
+const Container = ({children}) => {
+  return (
+    <div className='w-[97%] mx-auto my-5'>
+      {children}
+    </div>
+  )
+}
+
+export default Container
