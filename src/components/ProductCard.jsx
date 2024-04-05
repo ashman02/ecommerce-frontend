@@ -20,7 +20,7 @@ const ProductCard = ({
       <div className="text py-3 px-2">
         <h3 className='md:text-lg font-semibold'>{title}</h3>
         <div>{price}$</div>
-
+          
       </div>
     </div>
   )

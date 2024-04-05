@@ -5,11 +5,7 @@ import { useGetAllProductsQuery } from "../redux/services/productApi"
 const Home = () => {
 
   const { data, error, isLoading } = useGetAllProductsQuery();
-  if (data){
-    data.map(product => (
-      console.log(product.images[0].replaceAll(/[\[\]&]+/g, ''))
-    ))
-  }
+
 
   return (
     <>

@@ -6,15 +6,19 @@ const Button = ({
     bg="bg-slate-400",
     textColor = "text-white",
     classes = "",
+    paddingX = "px-3",
     handleClick,
     ...props 
 }) => {
   return (
-    <div className='ml-8'>
+    <div className=''>
       <button
       type={type}
       {...props}
-       className={`${bg} ${textColor} py-2 px-3 rounded-md text-lg`}> {children} </button>
+       className={`${bg} ${textColor} ${paddingX} py-2 rounded-md text-lg`}
+       onClick={handleClick}
+       > {children} </button>
+    
     </div>
   )
 }
