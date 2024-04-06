@@ -18,7 +18,7 @@ const ProductCard = ({
         <img src={img} alt="" />
       </div>
       <div className="text py-3 px-2">
-        <h3 className='md:text-lg font-semibold'>{title}</h3>
+        <h3 className='md:text-lg font-semibold min-h-14 max-h-14 overflow-hidden'>{title}</h3>
         <div>{price}$</div>
           
       </div>

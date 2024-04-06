@@ -1,26 +1,34 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Container, Loader } from '../components'
 import { useParams } from 'react-router-dom'
 import { useGetProductDetailQuery } from "../redux/services/productApi"
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addToCart } from "../redux/features/cart/cartSlice"
+import { useNavigate } from 'react-router-dom'
 
 
 
 const ProductDetail = () => {
 
   const { productId } = useParams()
+  const navigate = useNavigate()
   const { data, isLoading, error } = useGetProductDetailQuery(productId)
+  const cartItems = useSelector(state => state.cart.cart)  
 
   const [imgIndex, setImgIndex] = useState(0)
-  const [quantity, setQuantity] = useState(1)
-
+  const [isInCart, setIsInCart] = useState(false)
   const dispatch = useDispatch()
 
 
+  useEffect(() => {
+    if(cartItems.length > 0 && data){
+      let item = cartItems.find(item => item.id === data.id)
+      if(item) setIsInCart(true)
+    }
+  }, [cartItems])
+
   const handleLeftslide = () => {
     if (imgIndex !== 0) {
-
       setImgIndex(imgIndex - 1)
     }
   }
@@ -28,21 +36,7 @@ const ProductDetail = () => {
     setImgIndex(imgIndex + 1)
   }
 
-  const handleDecreaseQuantity = () => {
-    if (quantity !== 1) {
-
-      setQuantity(quantity - 1)
-    }
-  }
-
-  const handleIncreaseQuantity = () => {
-    if (quantity <= 10) {
-
-      setQuantity(quantity + 1)
-    }
-
-  }
-
+  
   if (isLoading) {
     return <div className='flex justify-center items-center my-24'>
       <Loader />
@@ -79,21 +73,8 @@ const ProductDetail = () => {
           <div className='desc mt-3 mb-3 lg:min-h-48'>
             <p>{data.description}</p>
           </div>
-          <div className="quantity border-solid border-t-2 border-b-2 py-3 text-lg flex items-center justify-between">
-            <div>
-              Quantity: {quantity}
-            </div>
-            <div className='quantityControl flex gap-2'>
-              <button disabled={quantity === 1} onClick={handleDecreaseQuantity} className='bg-[#d1d5dbc2] rounded-full  py-1 px-3'>
-                -
-              </button>
-              <button disabled={quantity >= 10} onClick={handleIncreaseQuantity} className='bg-[#d1d5dbc2] rounded-full py-1 px-3'>
-                +
-              </button>
-            </div>
-          </div>
 
-          <div className='mt-8'>
+          {!isInCart && <div className='mt-8'>
             <Button paddingX='md:px-[120px] px-[50px]' 
             handleClick={() => { 
               dispatch(addToCart(
@@ -101,13 +82,19 @@ const ProductDetail = () => {
                   id : data.id,
                   title : data.title,
                   price : data.price,
-                  itemQuantity : quantity,
                   image : data.images[0]
                 }
               ))
           }}
              >Add to Cart</Button>
-          </div>
+          </div>}
+
+          {isInCart && <div className='mt-8'>
+            <Button bg={"bg-slate-900"} paddingX='md:px-[120px] px-[50px]' 
+            handleClick={() => { navigate('/cart')  }}
+             >Go to Cart</Button>
+          </div>}
+
         </div>
       </section>
     </Container>

@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Button from "./Button"
 import { useNavigate } from 'react-router-dom'
+
 
 
 const CartCard = ({
@@ -8,48 +9,68 @@ const CartCard = ({
   img,
   id,
   price,
-  quantity,
+  handleRemove,
+  handleBuy,
 }) => {
   const navigate = useNavigate()
+  const [quantity, setQuantity] = useState(1)
+
+  const handleDecreaseQuantity = () => {
+    if (quantity !== 1) {
+
+      setQuantity(quantity - 1)
+    }
+  }
+
+  const handleIncreaseQuantity = () => {
+    if (quantity <= 10) {
+
+      setQuantity(quantity + 1)
+    }
+
+  }
+
 
   return (
-    <div className='bg-gray-300  lg:w-[48%]'>
-      <div className=' flex gap-3 bg-[#f8fbff] pr-2' >
-        <div className='shadow-xl cursor-pointer'
-          onClick={() => navigate(`/productdetail/${id}`)}>
+    <div className='outerdiv w-[70%] md:w-[30%] lg:w-[18%] h-1/3 ' >
+      <div className='bg-gray-300 '>
+        <div className='h-72 overflow-hidden cursor-pointer'>
           <img src={img} alt=""
-            className='w-32 drop-shadow-lg mx-1 mt-1' />
+            onClick={() => navigate(`/productdetail/${id}`)} />
+        </div>
+        <div className="text py-3 px-2">
+          <h3 className='md:text-lg font-semibold cursor-pointer min-h-14 max-h-14 overflow-hidden'
+            onClick={() => navigate(`/productdetail/${id}`)}>{title}</h3>
+          <div>{price}$</div>
         </div>
 
-        <div className="text w-full">
-          <div className='title-info'>
-            <div className="title flex justify-between">
-              <h1 className='md:text-xl text-base font-bold md:w-[60%] leading-[1.3rem] cursor-pointer'
-                onClick={() => navigate(`/productdetail/${id}`)}>{title}</h1>
-              <div>
-                <img src="/images/cross.svg" alt="" className='w-7' />
-              </div>
-            </div>
-            <div className='md:text-lg'>Quantity: {quantity}</div>
+        <div className="quantity flex justify-between px-2">
+          <div>
+            Quantity: {quantity}
           </div>
-          <div className='price-btn flex justify-between items-center'>
-            <div className='price font-bold md:text-xl'>{price}$</div>
-            <div className="buttons">
-              <button disabled={quantity === 1} className='bg-[#898f9942] rounded-full mr-1 py-1 px-3'>
-                -
-              </button>
-              <button disabled={quantity >= 10} className='bg-[#898f9952] rounded-full py-1 px-3'>
-                +
-              </button>
-            </div>
+          <div>
+            <button disabled={quantity === 1} onClick={handleDecreaseQuantity} className='text-lg rounded-full  py-1 px-3'>
+              -
+            </button>
+            <button disabled={quantity >= 10} onClick={handleIncreaseQuantity} className=' text-lg rounded-full py-1 px-3'>
+              +
+            </button>
           </div>
         </div>
+
+        <div className="buy-remove flex justify-between p-2">
+          <Button bg='bg-slate-900'
+          handleClick={handleBuy}>Buy Now</Button>
+
+          <Button bg='bg-red-500' handleClick={handleRemove} >
+            Remove
+          </Button>
+        </div>
+
       </div>
-      <div className='text-center py-3'>
-        <Button>Buy Now</Button>
-      </div>
+
+
     </div>
-
 
   )
 }

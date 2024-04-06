@@ -15,7 +15,7 @@ const Button = ({
       <button
       type={type}
       {...props}
-       className={`${bg} ${textColor} ${paddingX} py-2 rounded-md text-lg`}
+       className={`${bg} ${textColor} ${paddingX} py-2 rounded-md text-lg disabled:opacity-50`}
        onClick={handleClick}
        > {children} </button>
     
