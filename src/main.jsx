@@ -14,6 +14,7 @@ import Cart from './pages/Cart.jsx'
 import Category from './pages/Category.jsx'
 import About from './pages/About.jsx'
 import ProductDetail from "./pages/ProductDetail.jsx"
+import ProductsByCategory from './pages/ProductsByCategory.jsx'
 
 const router = createBrowserRouter([
   {
@@ -29,7 +30,7 @@ const router = createBrowserRouter([
         element: <Search />
       },
       {
-        path: "/category",
+        path: "/allcategories",
         element: <Category />
       },
       {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
       {
         path: "/productdetail/:productId",
         element: <ProductDetail />
+      },
+      {
+        path: "category/:category/:categoryId",
+        element: <ProductsByCategory/>
       },
     ]
   }

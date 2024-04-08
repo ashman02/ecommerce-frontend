@@ -10,8 +10,8 @@ const LowerNavbar = () => {
             slug: '/'
         },
         {
-            name: 'Category',
-            slug: '/category'
+            name: 'Categories',
+            slug: '/allcategories'
         },
         {
             name: 'Cart',
