@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { CartCard, Container } from "../components"
-import { removeFromCart } from "../redux/features/cart/cartSlice"
+import { removeFromCart, checkItem, increaseQuantity, decreaseQuantity } from "../redux/features/cart/cartSlice"
 
 const Cart = () => {
 
@@ -19,11 +19,11 @@ const Cart = () => {
           </div>
         ) : (
           cartItems.map(item => (
-            <CartCard key={item.id} title={item.title} id={item.id} img={item.image} price={item.price} handleRemove={() => {
-              dispatch(removeFromCart(item.id))
-
-            }}
-              handleBuy={() => { console.log("Buying") }} />
+            <CartCard key={item.id} title={item.title} selected={item.selected} id={item.id} img={item.image} price={item.price} quantity={item.quantity}
+              handleRemove={() => { dispatch(removeFromCart(item.id)) }}
+              handleCheck={() => { dispatch(checkItem(item.id)) }}
+              handleDecreaseQuantity={() => { dispatch(decreaseQuantity(item.id)) }}
+              handleIncreaseQuantity={() => {dispatch(increaseQuantity(item.id))}} />
           ))
         )}
       </div>

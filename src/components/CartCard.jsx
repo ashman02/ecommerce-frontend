@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Button from "./Button"
 import { useNavigate } from 'react-router-dom'
 
@@ -10,29 +10,17 @@ const CartCard = ({
   id,
   price,
   handleRemove,
-  handleBuy,
+  selected,
+  quantity,
+  handleCheck,
+  handleDecreaseQuantity,
+  handleIncreaseQuantity
 }) => {
   const navigate = useNavigate()
-  const [quantity, setQuantity] = useState(1)
-
-  const handleDecreaseQuantity = () => {
-    if (quantity !== 1) {
-
-      setQuantity(quantity - 1)
-    }
-  }
-
-  const handleIncreaseQuantity = () => {
-    if (quantity <= 10) {
-
-      setQuantity(quantity + 1)
-    }
-
-  }
-
 
   return (
     <div className='outerdiv w-[70%] md:w-[30%] lg:w-[18%] h-1/3 ' >
+      <input onChange={handleCheck}  className='translate-y-6 ml-1' type="checkbox" name="select" id="cartCheck" checked={selected}  />
       <div className='bg-gray-300 '>
         <div className='h-72 overflow-hidden cursor-pointer'>
           <img src={img} alt=""
@@ -52,16 +40,13 @@ const CartCard = ({
             <button disabled={quantity === 1} onClick={handleDecreaseQuantity} className='text-lg rounded-full  py-1 px-3'>
               -
             </button>
-            <button disabled={quantity >= 10} onClick={handleIncreaseQuantity} className=' text-lg rounded-full py-1 px-3'>
+            <button disabled={quantity === 10} onClick={handleIncreaseQuantity} className=' text-lg rounded-full py-1 px-3'>
               +
             </button>
           </div>
         </div>
 
-        <div className="buy-remove flex justify-between p-2">
-          <Button bg='bg-slate-900'
-          handleClick={handleBuy}>Buy Now</Button>
-
+        <div className="buy-remove flex justify-center p-2">
           <Button bg='bg-red-500' handleClick={handleRemove} >
             Remove
           </Button>

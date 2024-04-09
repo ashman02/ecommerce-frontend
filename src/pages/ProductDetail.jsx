@@ -19,6 +19,10 @@ const ProductDetail = () => {
   const [isInCart, setIsInCart] = useState(false)
   const dispatch = useDispatch()
 
+  // if(data){
+  //   console.log(data.images[imgIndex].replaceAll(/[\[\]&]+/g, '').replaceAll('"', ''))
+  // }
+
 
   useEffect(() => {
     if(cartItems.length > 0 && data){
@@ -82,7 +86,9 @@ const ProductDetail = () => {
                   id : data.id,
                   title : data.title,
                   price : data.price,
-                  image : data.images[0]
+                  image : data.images[0],
+                  quantity : 1,
+                  selected : true,
                 }
               ))
           }}
