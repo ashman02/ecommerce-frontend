@@ -19,9 +19,6 @@ const ProductDetail = () => {
   const [isInCart, setIsInCart] = useState(false)
   const dispatch = useDispatch()
 
-  // if(data){
-  //   console.log(data.images[imgIndex].replaceAll(/[\[\]&]+/g, '').replaceAll('"', ''))
-  // }
 
 
   useEffect(() => {
@@ -57,13 +54,13 @@ const ProductDetail = () => {
     <Container>
       <section className='lg:flex justify-center gap-20 my-12 '>
         <div className='imagediv md:w-96 w-64 mx-auto lg:mx-0'>
-          <img className='md:w-96 w-64 ' src={data.images[imgIndex]} alt=""
+          <img className='md:w-96 w-64 min-h-64 md:min-h-96' src={data.images[imgIndex].replaceAll(/[\[\]&]+/g, '').replaceAll('"', '')} alt=""
           />
           <div className="buttons relative z-10 flex justify-between md:translate-y-[-13rem] translate-y-[-9rem]">
             <button disabled={imgIndex === 0} onClick={handleLeftslide} className='bg-[#d1d5dbc2] rounded-full'>
               <img src="/images/left-arrow.svg" alt="" className='md:w-12 w-8' />
             </button>
-            <button disabled={imgIndex === 2} onClick={handleRightslide} className='bg-[#d1d5dbc2] rounded-full'>
+            <button disabled={imgIndex === data.images.length - 1} onClick={handleRightslide} className='bg-[#d1d5dbc2] rounded-full'>
               <img src="/images/right-arrow.svg" alt="" className='md:w-12 w-8' />
             </button>
           </div>
@@ -86,7 +83,7 @@ const ProductDetail = () => {
                   id : data.id,
                   title : data.title,
                   price : data.price,
-                  image : data.images[0],
+                  image : data.images[imgIndex].replaceAll(/[\[\]&]+/g, '').replaceAll('"', ''),
                   quantity : 1,
                   selected : true,
                 }

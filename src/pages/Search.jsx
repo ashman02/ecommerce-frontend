@@ -51,7 +51,7 @@ const Search = () => {
     {results.length > 0 && <div className='text-center py-5'>
       <Button 
       handleClick={handleLimit}
-      disabled={isLoading}
+      disabled={results.length === 0 || limit > results.length}
       classes='disabled:bg-slate-100'
        >Show More</Button>
     </div>}

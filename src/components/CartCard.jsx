@@ -11,6 +11,7 @@ const CartCard = ({
   price,
   handleRemove,
   selected,
+  display = "block",
   quantity,
   handleCheck,
   handleDecreaseQuantity,
@@ -21,8 +22,8 @@ const CartCard = ({
   return (
     <div className='outerdiv w-[70%] md:w-[30%] lg:w-[18%] h-1/3 ' >
       <input onChange={handleCheck}  className='translate-y-6 ml-1' type="checkbox" name="select" id="cartCheck" checked={selected}  />
-      <div className='bg-gray-300 '>
-        <div className='h-72 overflow-hidden cursor-pointer'>
+      <div className='bg-gray-300 pb-3'>
+        <div className='h-56 overflow-hidden cursor-pointer'>
           <img src={img} alt=""
             onClick={() => navigate(`/productdetail/${id}`)} />
         </div>
@@ -36,7 +37,7 @@ const CartCard = ({
           <div>
             Quantity: {quantity}
           </div>
-          <div>
+          <div className={`${display}`}>
             <button disabled={quantity === 1} onClick={handleDecreaseQuantity} className='text-lg rounded-full  py-1 px-3'>
               -
             </button>
@@ -46,7 +47,7 @@ const CartCard = ({
           </div>
         </div>
 
-        <div className="buy-remove flex justify-center p-2">
+        <div className={`buy-remove flex justify-center p-2 ${display}`}>
           <Button bg='bg-red-500' handleClick={handleRemove} >
             Remove
           </Button>

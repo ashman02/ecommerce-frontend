@@ -1,10 +1,10 @@
 import React from 'react'
-import {Buy as BuyComponent} from "../components"
+import {AddressForm} from "../components"
 
 const Buy = () => {
   return (
     <div>
-      <BuyComponent/>
+      <AddressForm/>
     </div>
   )
 }
