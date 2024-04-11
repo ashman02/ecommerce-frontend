@@ -36,7 +36,7 @@ const AddressForm = () => {
   }, [address.pincode]);
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-lg overflow-hidden shadow-lg p-6">
+    <div className="lg:max-w-[60%] md:max-w-[80%] max-w-[97%] mx-auto bg-white rounded-lg overflow-hidden shadow-lg p-6">
       <h2 className="text-xl font-bold mb-4">Enter Address</h2>
 
       <div className="mb-4">

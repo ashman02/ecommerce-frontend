@@ -21,7 +21,7 @@ const CartCard = ({
 
   return (
     <div className='outerdiv w-[70%] md:w-[30%] lg:w-[18%] h-1/3 ' >
-      <input onChange={handleCheck}  className='translate-y-6 ml-1' type="checkbox" name="select" id="cartCheck" checked={selected}  />
+      <input onChange={handleCheck}  className={`translate-y-6 ml-1 ${display}`} type="checkbox" name="select" id="cartCheck" checked={selected}  />
       <div className='bg-gray-300 pb-3'>
         <div className='h-56 overflow-hidden cursor-pointer'>
           <img src={img} alt=""

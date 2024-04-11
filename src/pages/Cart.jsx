@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { CartCard, Container } from "../components"
+import { Button, CartCard, Container } from "../components"
 import { removeFromCart, checkItem, increaseQuantity, decreaseQuantity } from "../redux/features/cart/cartSlice"
+import {useNavigate} from "react-router-dom"
 
 const Cart = () => {
 
   const cartItems = useSelector(state => state.cart.cart)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   return (
     <Container>
@@ -27,6 +29,10 @@ const Cart = () => {
           ))
         )}
       </div>
+      {cartItems.length > 0 && <div className='fixed text-center bottom-2 w-svw z-10'>
+        <Button bg='bg-slate-900' paddingX='md:px-[120px] px-[50px]' 
+       handleClick={() => navigate("/buy")}>Place Order</Button>
+      </div>}
     </Container>
   )
 }

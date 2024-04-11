@@ -8,6 +8,7 @@ import Loader from "./Loader";
 import Button from "./Button";
 import CartCard from "./CartCard";
 import AddressForm from "./AddressForm";
+import Payment from "./Payment";
 
 
 
@@ -22,4 +23,5 @@ export {
     ProductCard,
     Button,
     AddressForm,
+    Payment,
 }
