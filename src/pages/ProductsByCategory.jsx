@@ -30,7 +30,7 @@ const ProductsByCategory = () => {
             <h1 className='font-bold text-slate-400 text-center text-xl md:text-3xl'>Sorry to say but currently no products are available under this category</h1>
           ) : (
             data.map(item => (
-              <ProductCard key={item.id} title={item.title} id={item.id} img={item.images[0].replaceAll(/[\[\]&]+/g, '').replaceAll('"', '')} price={item.price} />
+              <ProductCard key={item.id} title={item.title} id={item.id} img={item.images[0].replace(/[^a-zA-Z0-9\/\.\:]/g, '')} price={item.price} />
             ))
           )}
         </div>

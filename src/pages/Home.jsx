@@ -27,7 +27,7 @@ const Home = () => {
             </div>}
 
             {data && data.map(product => ( 
-                <ProductCard key={product.id} title={product.title} id={product.id} img={product.images[0].replaceAll(/[\[\]&]+/g, '').replaceAll('"', '')} price={product.price} />
+                <ProductCard key={product.id} title={product.title} id={product.id} img={product.images[0].replace(/[^a-zA-Z0-9\/\.\:]/g, '')} price={product.price} />
                 
             ))}
           </div>
