@@ -16,7 +16,7 @@ const Home = () => {
             <h2 className='md:text-3xl text-lg font-bold'>New Arrivals</h2>
             <p className='md:text-lg'>Indulge in luxury without breaking the bank.</p>
           </div>
-          <div className='products flex flex-wrap justify-center gap-5'>
+          <div className='products flex flex-wrap justify-center gap-5'>i am back
 
            
 
