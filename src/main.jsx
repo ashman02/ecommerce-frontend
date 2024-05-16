@@ -15,12 +15,22 @@ import Category from './pages/Category.jsx'
 import About from './pages/About.jsx'
 import ProductDetail from "./pages/ProductDetail.jsx"
 import ProductsByCategory from './pages/ProductsByCategory.jsx'
+import Signup from './pages/Signup.jsx'
+import Verify from './pages/Verify.jsx'
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
+      {
+        path : "/sign-up",
+        element : <Signup />
+      },
+      {
+        path : "/verify",
+        element : <Verify />
+      },
       {
         path: "",
         element: <Home />

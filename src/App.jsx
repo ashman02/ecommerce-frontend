@@ -1,13 +1,15 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useLocation } from "react-router-dom"
 import { Footer, Navbar } from "./components"
-import { useEffect } from "react"
+
 
 function App() {
+  const location = useLocation()
+  const noNavbarRoutes = ["/sign-up", "/sign-in"]
   return (
     <>
-    <Navbar/>
+    {!noNavbarRoutes.includes(location.pathname) && <Navbar/>}
     <Outlet/>
-    <Footer/>
+    {!noNavbarRoutes.includes(location.pathname) && <Footer/>}
     </>
   )
 }
