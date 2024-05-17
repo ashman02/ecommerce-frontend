@@ -3,10 +3,10 @@ import { signUpSchema } from "../schemas/sign-up.js"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { setSignUp } from "../redux/features/signup/signupSlice.js"
 import { setVerify } from "../redux/features/verficationcode/verifySlice.js"
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 import { useDebounceCallback } from "usehooks-ts"
 import {
   Form,
@@ -20,6 +20,7 @@ import {
 import { Button } from "@/components/ui/button.jsx"
 import { Input } from "@/components/ui/input.jsx"
 import { Loader2 } from "lucide-react"
+import { useToast } from "@/components/ui/use-toast"
 
 const Signup = () => {
   const dispatch = useDispatch()
@@ -30,7 +31,7 @@ const Signup = () => {
   const [isCheckingUsername, setIsCheckingUsername] = useState(false)
 
   const debounced = useDebounceCallback(setUsername, 500)
-
+  const { toast } = useToast()
   //checking username
   useEffect(() => {
     const checkUsername = async () => {
@@ -40,10 +41,10 @@ const Signup = () => {
           const response = await axios.get(
             `/api/v1/users/check-username/${username}`
           )
+          setUsernameMessage(response.data?.message)
           setIsCheckingUsername(false)
-          console.log(response.data)
         } catch (error) {
-          console.log("error while checking username", error.response.data)
+          setUsernameMessage("Username is taken")
           setIsCheckingUsername(false)
         }
       }
@@ -62,7 +63,6 @@ const Signup = () => {
   })
 
   const onSubmit = async (data) => {
-    console.log(data)
     setIsSubmitting(true)
     dispatch(setSignUp(data))
     try {
@@ -70,11 +70,17 @@ const Signup = () => {
         email: data.email,
         username: data.username,
       })
-      console.log(response)
-      dispatch(setVerify(response.data))
+      dispatch(setVerify(response.data?.data))
+      toast({
+        title: "Verification Code",
+        description: response.data?.message,
+      })
       navigate("/verify")
     } catch (error) {
-      console.log("Error while seding verification code", error)
+      toast({
+        title: "Email",
+        description: "this email is already registered",
+      })
     } finally {
       setIsSubmitting(false)
     }
@@ -86,7 +92,7 @@ const Signup = () => {
         <h1 className="font-bold text-xl md:text-3xl">
           Welcome to Chobar Cart
         </h1>
-        <p className="md:text-lg">Unleash the power of a comman man</p>
+        <p className="md:text-lg">The whole new word of products</p>
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -110,6 +116,19 @@ const Signup = () => {
               </FormItem>
             )}
           />
+          <span
+            className={`pt-4  ${
+              usernameMessage === "Username is available"
+                ? "text-green-500"
+                : "text-red-500"
+            }`}
+          >
+            {isCheckingUsername ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              usernameMessage
+            )}
+          </span>
           <FormField
             control={form.control}
             name="fullName"
@@ -153,7 +172,7 @@ const Signup = () => {
             <Button type="submit" disabled={isSubmitting}>
               {isSubmitting ? (
                 <>
-                  <Loader2 /> "Submitting
+                  <Loader2 className="animate-spin" /> Submitting
                 </>
               ) : (
                 "Submit"
@@ -162,6 +181,22 @@ const Signup = () => {
           </div>
         </form>
       </Form>
+      <div className="flex justify-center items-center mt-8">
+        <div className="text-center bg-white dark:bg-[#020817] p-4 rounded-lg shadow-md">
+          <p className="text-black dark:text-gray-300">
+            Already have an account?
+          </p>
+          <Link
+            to="/log-in"
+            className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-600 font-semibold"
+          >
+            Log in
+          </Link>
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+            If you already have an account, click the button above to log in.
+          </p>
+        </div>
+      </div>
     </div>
   )
 }

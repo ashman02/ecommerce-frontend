@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { number } from "zod";
 
 const initialState = {
-    value : ""
+    value : ''
 }
 
 export const verifySlice = createSlice({
