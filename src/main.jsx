@@ -19,6 +19,7 @@ import ProductDetail from "./pages/ProductDetail.jsx"
 import ProductsByCategory from "./pages/ProductsByCategory.jsx"
 import Signup from "./pages/Signup.jsx"
 import Verify from "./pages/Verify.jsx"
+import SignIn from "./pages/SignIn.jsx"
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,11 @@ const router = createBrowserRouter([
         path: "/verify",
         element: <Verify />,
       },
+      {
+        path: "/sign-in",
+        element: <SignIn />,
+      },
+
       {
         path: "",
         element: <Home />,

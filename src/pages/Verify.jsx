@@ -48,7 +48,7 @@ const Verify = () => {
           title: "Success",
           description: response.data?.message,
         })
-        navigate("/log-in")
+        navigate("/sign-in")
       } catch (error) {
         toast({
           title: "Error",

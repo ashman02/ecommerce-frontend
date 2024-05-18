@@ -6,6 +6,7 @@ import { Toaster } from "./components/ui/toaster"
 function App() {
   const location = useLocation()
   const noNavbarRoutes = ["/sign-up", "/sign-in", "/verify"]
+
   return (
     <>
     {!noNavbarRoutes.includes(location.pathname) && <Navbar/>}
