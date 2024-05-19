@@ -4,8 +4,8 @@ import {useGetCategoriesQuery} from "../redux/services/productApi"
 
 
 
-const Category = () => {
 
+const Category = () => {
 
   const {data, isLoading, error} = useGetCategoriesQuery()
 

@@ -17,11 +17,14 @@ import { Button } from "@/components/ui/button"
 import { Link, useNavigate } from "react-router-dom"
 import { Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
+import { useDispatch } from "react-redux"
+import { login } from "@/redux/features/auth/authSlice"
 
 const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const { toast } = useToast()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const form = useForm({
     resolver: zodResolver(signInSchema),
@@ -35,6 +38,7 @@ const SignIn = () => {
     setIsSubmitting(true)
     try {
       const response = await axios.post("/api/v1/users/login", data)
+      dispatch(login(response.data?.data))
       toast({
         title: "Success",
         description: response.data?.message,

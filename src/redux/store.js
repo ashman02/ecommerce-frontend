@@ -4,6 +4,7 @@ import inputReducer from "./features/input/inputSlice";
 import cartReducer from "./features/cart/cartSlice";
 import signupReducer from "./features/signup/signupSlice";
 import verifyReducer from "./features/verficationcode/verifySlice";
+import authReducer from "./features/auth/authSlice";
 
 
 export const store = configureStore({
@@ -12,7 +13,8 @@ export const store = configureStore({
         input : inputReducer,
         cart : cartReducer,
         signup : signupReducer,
-        verify : verifyReducer
+        verify : verifyReducer,
+        auth : authReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(productApi.middleware)
 })
