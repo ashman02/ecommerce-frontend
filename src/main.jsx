@@ -20,6 +20,7 @@ import ProductsByCategory from "./pages/ProductsByCategory.jsx"
 import Signup from "./pages/Signup.jsx"
 import Verify from "./pages/Verify.jsx"
 import SignIn from "./pages/SignIn.jsx"
+import Profile from "./pages/Profile.jsx"
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path: "/:username",
+        element: <Profile/>,
       },
       {
         path: "/search",

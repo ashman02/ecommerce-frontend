@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Menu } from "lucide-react"
+import { Separator } from "../ui/separator"
 
 const LowerNavbar = () => {
   const authStatus = useSelector((state) => state.auth.status)
@@ -87,16 +88,19 @@ const LowerNavbar = () => {
             <DropdownMenuTrigger>
               <img
                 width={45}
-                src={user?.image ? user.image : "/images/default-user.png"}
+                src={user?.avatar ? user.avatar : "/images/default-user.png"}
                 alt="user-profile"
                 className="cursor-pointer hover:bg-gray-300 duration-300 rounded-full p-1"
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>
-                <User />
-                <span>Profile</span>
-              </DropdownMenuItem>
+              <NavLink to={`/${user.username}`}>
+                <DropdownMenuItem>
+                  <User />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+              </NavLink>
+
               <DropdownMenuSeparator />
               <DropdownMenuItem>
                 <Upload />
@@ -152,10 +156,10 @@ const LowerNavbar = () => {
             <NavLink to="/sign-up">
               <Button variant="outline">Sign-up</Button>
             </NavLink>
-            
           </div>
         )}
       </nav>
+      <Separator className="my-5" />
     </Container>
   )
 }

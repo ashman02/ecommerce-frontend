@@ -41,7 +41,6 @@ const Searchbar = () => {
                               />
                         </div>
                     </div>
-                    <div className='h-[1px] bg-gray-500 my-3 opacity-20'></div>
                 </Container>
             </header>
         </>
