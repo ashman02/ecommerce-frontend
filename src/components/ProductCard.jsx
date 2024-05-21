@@ -13,8 +13,8 @@ const ProductCard = ({
   return (
     <div
       onClick={() => navigate(`/productdetail/${id}`) }
-      className='bg-gray-300 w-[70%] md:w-[30%] lg:w-[18%] h-1/3 cursor-pointer'>
-      <div className='h-56 overflow-hidden'>
+      className='dark:bg-[#1e2025] bg-[#d4caca] w-[45%] md:w-[30%] lg:w-[18%] h-1/3 cursor-pointer rounded-sm shadow-sm'>
+      <div className='md:h-56 h-32 overflow-hidden rounded-t-sm'>
         <img src={img} alt="" />
       </div>
       <div className="text py-3 px-2">

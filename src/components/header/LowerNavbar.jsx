@@ -29,6 +29,7 @@ const LowerNavbar = () => {
   const { toast } = useToast()
   const dispatch = useDispatch()
 
+
   useEffect(() => {
     setIsAuthenticated(authStatus)
   }, [authStatus])
