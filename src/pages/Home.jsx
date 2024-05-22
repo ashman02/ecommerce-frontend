@@ -1,35 +1,105 @@
-import React from 'react'
-import { Hero, ProductCard, Container, Loader } from '../components'
-import { useGetAllProductsQuery } from "../redux/services/productApi"
+import React, { useEffect, useRef, useState } from "react"
+import { ProductCard, Container, Loader } from "../components"
+import axios from "axios"
 
 const Home = () => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [isProductLoading, setIsProductLoading] = useState(false)
+  const [categories, setCategories] = useState([])
+  const [products, setProducts] = useState([])
 
-  const { data, error, isLoading } = useGetAllProductsQuery();
+  //mouse scrolling
+  const containerRef = useRef(null)
+  const [isDragging, setIsDragging] = useState(false)
+  const [startX, setStartX] = useState(null)
+  const [scrollLeft, setScrollLeft] = useState(0)
+
+  const getCategories = async () => {
+    setIsLoading(true)
+    try {
+      const response = await axios.get("/api/v1/category/get-categories")
+      setCategories(response.data.data)
+      setIsLoading(false)
+    } catch (error) {
+      setIsLoading(false)
+    }
+  }
+
+  const getProducts = async () => {
+    setIsProductLoading(true)
+    try {
+      const response = await axios.get("/api/v1/products/home-products")
+      setProducts(response.data.data)
+      setIsProductLoading(false)
+    } catch (error) {
+      setIsProductLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    getCategories()
+    getProducts()
+  }, [])
+
+  //mouse scrolling functions
+  const handleMouseDown = (event) => {
+    if (event.button !== 0) return
+    setIsDragging(true)
+    setStartX(event.pageX - containerRef.current.offsetLeft)
+    setScrollLeft(containerRef.current.scrollLeft)
+  }
+
+  const handleMouseMove = (event) => {
+    if (!isDragging) return
+    const x = event.pageX - containerRef.current.offsetLeft
+    const walk = (x - startX) * 2
+    containerRef.current.scrollLeft = scrollLeft - walk
+  }
+
+  const handleMouseUp = () => {
+    setIsDragging(false)
+  }
+
+  const handleMouseLeave = () => {
+    setIsDragging(false)
+  }
 
   return (
     <>
-      <Hero />
       <Container>
-        <div>
-          <div className="text text-center py-10">
-            <h2 className='md:text-3xl text-lg font-bold'>New Arrivals</h2>
-            <p className='md:text-lg'>Indulge in luxury without breaking the bank.</p>
-          </div>
-          <div className='products flex flex-wrap justify-center gap-5'>
-
-           
-
-            {isLoading && <Loader/>}
-
-            {error && <div className='text-center my-20'>
-              <h1 className='font-black text-gray-300 text-xl md:text-4xl'>Sorry Could not found the Products</h1>
-            </div>}
-
-            {data && data.map(product => ( 
-                <ProductCard key={product.id} title={product.title} id={product.id} img={product.images[0].replace(/[^a-zA-Z0-9\/\.\:]/g, '')} price={product.price} />
-                
-            ))}
-          </div>
+        <div
+          className="flex gap-5 overflow-x-scroll no-scrollbar"
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+          ref={containerRef}
+        >
+          {categories.map((category) => (
+            <div
+              className="flex flex-col items-center justify-center"
+              key={category._id}
+            >
+              <img
+                src={category.image}
+                alt={category.title}
+                className="rounded-full h-12 w-12 md:w-16 md:h-16"
+              />
+              <h3 className="font-semibold md:text-lg">{category.title}</h3>
+            </div>
+          ))}
+        </div>
+        <div className="mt-5 flex flex-wrap gap-3">
+          {isProductLoading ? (
+            <div className="flex justify-center items-center">
+              <Loader />
+            </div>
+          ) : (
+            // check sorting of this section
+            products.map(product => (
+              <ProductCard key={product._id} title={product.title} price={product.price} id={product._id} img={product.image[0]} ownerImg={product.owner.avatar} ownerUsername={product.owner.username}/>
+            ))
+          )}
         </div>
       </Container>
     </>
