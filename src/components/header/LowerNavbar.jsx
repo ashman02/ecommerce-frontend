@@ -150,7 +150,7 @@ const LowerNavbar = () => {
             </Button>
           </div>
         ) : (
-          <div className="flex items-center justify-center gap-3">
+          <div className="flex md:flex-row flex-col md:items-center justify-center gap-3">
             <NavLink to="/sign-in">
               <Button variant="outline">Log-in</Button>
             </NavLink>

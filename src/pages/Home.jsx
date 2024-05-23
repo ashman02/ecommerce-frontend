@@ -77,7 +77,7 @@ const Home = () => {
         >
           {categories.map((category) => (
             <div
-              className="flex flex-col items-center justify-center"
+              className="flex flex-col items-center justify-center cursor-pointer"
               key={category._id}
             >
               <img

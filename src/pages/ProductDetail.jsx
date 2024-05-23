@@ -1,105 +1,175 @@
-import React, { useEffect, useState } from 'react'
-import { Button, Container, Loader } from '../components'
-import { useParams } from 'react-router-dom'
-import { useGetProductDetailQuery } from "../redux/services/productApi"
-import { useDispatch, useSelector } from 'react-redux'
-import { addToCart } from "../redux/features/cart/cartSlice"
-import { useNavigate } from 'react-router-dom'
-
-
+import React, { useEffect, useState } from "react"
+import { Container, Loader } from "../components"
+import { Link, useParams } from "react-router-dom"
+import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import axios from "axios"
+import { useToast } from "@/components/ui/use-toast"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button"
 
 const ProductDetail = () => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState(false)
+  const [product, setProduct] = useState([])
+  const [isInCart, setIsInCart] = useState(false)
+
+  const authStatus = useSelector((state) => state.auth.status)
+  const userData = useSelector((state) => state.auth.data)
 
   const { productId } = useParams()
   const navigate = useNavigate()
-  const { data, isLoading, error } = useGetProductDetailQuery(productId)
-  const cartItems = useSelector(state => state.cart.cart)  
+  const { toast } = useToast()
 
-  const [imgIndex, setImgIndex] = useState(0)
-  const [isInCart, setIsInCart] = useState(false)
-  const dispatch = useDispatch()
-
-
+  const fetchProductDetails = async () => {
+    setIsLoading(true)
+    try {
+      const response = await axios.get(`/api/v1/products/product/${productId}`)
+      setProduct(response.data.data[0])
+      setIsLoading(false)
+      setError(false)
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Product not found",
+      })
+      setError(true)
+      setIsLoading(false)
+    }
+  }
 
   useEffect(() => {
-    if(cartItems.length > 0 && data){
-      let item = cartItems.find(item => item.id === data.id)
-      if(item) setIsInCart(true)
+    fetchProductDetails()
+    if (authStatus) {
+      if (userData?.cart?.includes(productId)) {
+        setIsInCart(true)
+      }
     }
-  }, [cartItems])
+  }, [])
 
-  const handleLeftslide = () => {
-    if (imgIndex !== 0) {
-      setImgIndex(imgIndex - 1)
+  const addToCart = async () => {
+    try {
+      const response = await axios.patch(`/api/v1/users/addto-cart/${productId}`)
+      setIsInCart(true)
+      toast({
+        title : "Success",
+        description : response.data.message
+      })
+    } catch (error) {
+      toast({
+        title : "Error",
+        description :"Could not save the product"
+      })
     }
   }
-  const handleRightslide = () => {
-    setImgIndex(imgIndex + 1)
-  }
 
-  
   if (isLoading) {
-    return <div className='flex justify-center items-center my-24'>
-      <Loader />
-    </div>
+    return (
+      <div>
+        <Loader />
+      </div>
+    )
   }
 
   if (error) {
-    return <div className='flex justify-center items-center my-32'>
-      <h1 className='font-bold text-slate-400 text-xl md:text-3xl'>Oops! It seems like something went wrong. Please try again later.</h1>
-    </div>
+    return (
+      <div className="flex justify-center items-center my-32">
+        <h1 className="font-bold text-xl md:text-3xl text-center">
+          404! Product not found
+        </h1>
+      </div>
+    )
   }
 
   return (
     <Container>
-      <section className='lg:flex justify-center gap-20 my-12 '>
-        <div className='imagediv md:w-96 w-64 mx-auto lg:mx-0'>
-          <img className='md:w-96 w-64 min-h-64 md:min-h-96' src={data.images[imgIndex].replace(/[^a-zA-Z0-9\/\.\:]/g, '')} alt=""
-          />
-          <div className="buttons relative z-10 flex justify-between md:translate-y-[-13rem] translate-y-[-9rem]">
-            <button disabled={imgIndex === 0} onClick={handleLeftslide} className='bg-[#d1d5dbc2] rounded-full'>
-              <img src="/images/left-arrow.svg" alt="" className='md:w-12 w-8' />
-            </button>
-            <button disabled={imgIndex === data.images.length - 1} onClick={handleRightslide} className='bg-[#d1d5dbc2] rounded-full'>
-              <img src="/images/right-arrow.svg" alt="" className='md:w-12 w-8' />
-            </button>
+      <div>
+        <div className="w-full overflow-y-hidden md:flex items-center justify-center gap-10 pb-4">
+          <div className="carousel">
+            <Carousel className="w-1/2 md:w-full max-w-xs mx-auto">
+              <CarouselContent>
+                {product.image?.map((img) => (
+                  <CarouselItem key={img}>
+                    <Link to={img} target="_blank">
+                      <img
+                        src={img}
+                        alt="product-image"
+                        className="rounded-sm"
+                      />
+                    </Link>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
           </div>
-
+          <div className="text-center">
+            <div>
+              <h1 className="font-bold text-xl md:text-3xl">{product.title}</h1>
+              <p className="text-lg">{product.description}</p>
+            </div>
+            <div className="flex items-center justify-between mx-6 py-6">
+              <p className="font-bold text-xl md:text-3xl">₹{product.price}</p>
+              {product.gender && <p>{product.gender}</p>}
+            </div>
+            <div className="flex items-center gap-3 pl-6 cursor-pointer"
+            onClick={() => {navigate(`/${product.owner?.username}`)}}
+            >
+              <img
+                src={product.owner?.avatar}
+                alt=""
+                className="rounded-full h-10 w-10 md:w-12 md:h-12"
+              />
+              <h3>{product.owner?.username}</h3>
+            </div>
+            <div className="save">
+              {isInCart ? (
+                <Button
+                  onClick={() => {
+                    navigate("/cart")
+                  }}
+                  variant="outline"
+                >
+                  Go to cart
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    if (!authStatus) {
+                      navigate("/sign-in")
+                    } else {
+                      addToCart()
+                    }
+                  }}
+                >
+                  Save
+                </Button>
+              )}
+            </div>
+          </div>
         </div>
-        <div className="detail lg:w-1/3 lg:mt-0 text-center lg:text-start">
-          <div className="title">
-            <h1 className='md:text-3xl text-lg font-bold'>{data.title}</h1>
-            <h1 className='md:text-3xl text-lg'>{data.price}$</h1>
-          </div>
-          <div className='desc mt-3 mb-3 lg:min-h-48'>
-            <p>{data.description}</p>
-          </div>
-
-          {!isInCart && <div className='mt-8'>
-            <Button paddingX='md:px-[120px] px-[50px]' 
-            handleClick={() => { 
-              dispatch(addToCart(
-                {
-                  id : data.id,
-                  title : data.title,
-                  price : data.price,
-                  image : data.images[0].replace(/[^a-zA-Z0-9\/\.\:]/g, ''),
-                  quantity : 1,
-                  selected : true,
-                }
-              ))
-          }}
-             >Add to Cart</Button>
-          </div>}
-
-          {isInCart && <div className='mt-8'>
-            <Button bg={"bg-slate-900"} paddingX='md:px-[120px] px-[50px]' 
-            handleClick={() => { navigate('/cart')  }}
-             >Go to Cart</Button>
-          </div>}
-
-        </div>
-      </section>
+        <Separator />
+        {
+          !authStatus ? (
+            <div className="flex items-center justify-center gap-2 flex-col py-3">
+              <p className=" font-bold text-xl md:text-3xl">Login to see comments</p>
+              <Button variant="ghost" onClick={() => { navigate('sign-in')}}>Login</Button>
+            </div>
+          ) : (
+            <div>
+              Comment Section
+            </div>
+          )
+        }
+      </div>
     </Container>
   )
 }
