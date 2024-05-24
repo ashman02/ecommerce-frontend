@@ -97,7 +97,7 @@ const Home = () => {
           ) : (
             // check sorting of this section
             products.map(product => (
-              <ProductCard key={product._id} title={product.title} price={product.price} id={product._id} img={product.image[0]} ownerImg={product.owner.avatar} ownerUsername={product.owner.username}/>
+              <ProductCard key={product._id} title={product.title} price={product.price} id={product._id} img={product.image[0]} ownerImg={product.owner.avatar || "/images/default-user.png"} ownerUsername={product.owner.username}/>
             ))
           )}
         </div>
