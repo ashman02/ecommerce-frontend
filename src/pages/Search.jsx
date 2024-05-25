@@ -1,60 +1,117 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
-import { useGetAllProductsQuery } from '../redux/services/productApi'
-import { Button, ProductCard, Loader } from "../components"
+import { Button, ProductCard, Loader, Container } from "../components"
+import axios from "axios"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
+import { Value } from "@radix-ui/react-select"
+import { Separator } from "@/components/ui/separator"
 
 const Search = () => {
+  const query = useSelector((state) => state.input.value)
+  const [isLoading, setIsLoading] = useState(false)
+  const [limit, setLimit] = useState(30)
+  const [page, setPage] = useState(1)
+  const [sortBy, setSortBy] = useState("price")
+  const [sortType, setSortType] = useState("asc")
+  const [gender, setGender] = useState("")
+  const [products, setProducts] = useState([])
 
-  const [limit, setLimit] = useState(10)
-  const input = useSelector(state => state.input.value)
-  const { data, isLoading, error } = useGetAllProductsQuery(limit)
-  const [results, setResults] = useState([])
-
+  const getProducts = async () => {
+    if (query.length) {
+      setIsLoading(true)
+      try {
+        const response = await axios.get(
+          `/api/v1/products/get-products?query=${query}&limit=${limit}&page=${page}&sortBy=${sortBy}&sortType=${sortType}&gender=${gender}`
+        )
+        setProducts(response.data.data)
+        setIsLoading(false)
+      } catch (error) {
+        setIsLoading(false)
+      }
+    }
+  }
 
   useEffect(() => {
-    if (data) {
-      const result = data.filter((item) => {
-        return (
-          item.title.toLowerCase().includes(input.toLowerCase()) ||
-          item.description.toLowerCase().includes(input.toLowerCase())
-        )
-      })
-      setResults(result)
+    getProducts()
+  }, [query, sortBy, sortType, limit, page, gender])
+
+  const handleSortChange = (event) => {
+    const value = event.target.value
+    if (value === "newest") {
+      setSortBy("createdAt")
+      setSortType("asc")
+    } else if (value === "low") {
+      setSortBy("price")
+      setSortType("asc")
+    } else {
+      setSortBy("price")
+      setSortType("desc")
     }
-  }, [data, input])
-
-
-  const handleLimit = () => {
-    setLimit(limit + 10)
   }
 
-  if(isLoading){
-    return <div className='flex justify-center py-20'>
-      <Loader/>
-    </div>
-  }
 
   return (
     <>
-    <div className='flex flex-wrap gap-5 items-center justify-center duration-300 ease-in-out '>
-      {results.length === 0 ? (
-        <div className='flex items-center justify-center mt-24'>
-          <h1 className='text-xl md:text-3xl font-bold text-slate-400'>Product Not Found</h1>
-          {/* later work fetch some products from api encourage user to buy those. */}
+      <Container>
+        <div className="flex gap-5 items-start">
+          <div className="w-1/3">
+            <div>
+              <h2>Sort By</h2>
+              <RadioGroup defaultValue="low">
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    value="newest"
+                    id="option-one"
+                    onClick={handleSortChange}
+                  />
+                  <Label htmlFor="option-one">Newest first</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    value="low"
+                    id="option-two"
+                    onClick={handleSortChange}
+                  />
+                  <Label htmlFor="option-two">Price-Low to High</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem
+                    value="high"
+                    id="option-two"
+                    onClick={handleSortChange}
+                  />
+                  <Label htmlFor="option-three">Price-High to Low</Label>
+                </div>
+              </RadioGroup>
+            </div>
+          </div>
+          {
+            isLoading ? (
+              <>
+              <div className="flex items-center justify-center">
+                <Loader />
+              </div>
+              </>
+            ) : (
+              <div className="flex flex-wrap items-center gap-3">
+            {products.map((product) => (
+              <ProductCard
+                key={product._id}
+                title={product.title}
+                img={product.image[0]}
+                price={product.price}
+                id={product._id}
+                ownerUsername={product.owner?.username}
+                ownerImg={product.owner?.avatar}
+              />
+            ))}
+          </div>
+            )
+          }
+          
         </div>
-      ) : (
-        results.map(item => (
-          <ProductCard key={item.id} title={item.title} id={item.id} img={item.images[0].replace(/[^a-zA-Z0-9\/\.\:]/g, '')} price={item.price} />
-        ))
-      )}
-    </div>
-    {results.length > 0 && <div className='text-center py-5'>
-      <Button 
-      handleClick={handleLimit}
-      disabled={results.length === 0 || limit > results.length}
-      classes='disabled:bg-slate-100'
-       >Show More</Button>
-    </div>}
+      </Container>
     </>
   )
 }
