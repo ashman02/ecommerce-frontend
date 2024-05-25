@@ -1,17 +1,37 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Category as CategoryComponent, Container, Loader } from "../components"
 import {useGetCategoriesQuery} from "../redux/services/productApi"
+import axios from 'axios'
 
 
 
 
 const Category = () => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [isError, setIsError] = useState(false)
+  const [categories, setCategories] = useState([])
 
-  const {data, isLoading, error} = useGetCategoriesQuery()
+  const fetchCategories = async () => {
+    setIsLoading(true)
+    try {
+      const response = await axios.get("/api/v1/category/get-categories")
+      setCategories(response.data.data)
+      setIsError(false)
+      setIsLoading(false)
+    } catch (error) {
+      setIsError(true)
+      setIsLoading(false)
+    }
+  }
 
-  if (error) {
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
+  if (isError) {
     return <div className='flex justify-center items-center my-32'>
-      <h1 className='font-bold text-slate-400 text-xl md:text-3xl text-center'>404! Categories not found</h1>
+      <h1 className='font-bold text-xl md:text-3xl text-center'>404! Categories not found</h1>
     </div>
   }
 
@@ -21,8 +41,8 @@ const Category = () => {
        {isLoading ? (
         <Loader/>
        ) : (
-        data.map(item => (
-          <CategoryComponent key={item.id} title={item.name} id={item.id} img={item.image}/>
+        categories.map(item => (
+          <CategoryComponent key={item._id} title={item.title} id={item._id} img={item.image} />
         ))
        )}
       </div >
