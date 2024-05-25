@@ -14,7 +14,26 @@ import {
 } from "@/components/ui/carousel"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-import { Loader2 } from "lucide-react"
+import { Edit2, Loader2, LucideMoreVertical, Trash2 } from "lucide-react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
 
 const ProductDetail = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -26,6 +45,7 @@ const ProductDetail = () => {
 
   const [isSubmittingComment, setIsSubmittingComment] = useState(false)
   const commentInput = useRef()
+  const editCommentInput = useRef()
 
   const authStatus = useSelector((state) => state.auth.status)
   const userData = useSelector((state) => state.auth.data)
@@ -39,6 +59,11 @@ const ProductDetail = () => {
     try {
       const response = await axios.get(`/api/v1/products/product/${productId}`)
       setProduct(response.data.data[0])
+      if (authStatus) {
+        if (userData?.cart?.includes(productId)) {
+          setIsInCart(true)
+        }
+      }
       setIsLoading(false)
       setError(false)
     } catch (error) {
@@ -63,11 +88,6 @@ const ProductDetail = () => {
 
   useEffect(() => {
     fetchProductDetails()
-    if (authStatus) {
-      if (userData?.cart?.includes(productId)) {
-        setIsInCart(true)
-      }
-    }
     fetchProductComments()
   }, [authStatus])
 
@@ -96,6 +116,7 @@ const ProductDetail = () => {
         await axios.post(`/api/v1/comments/${productId}`, {
           content: commentInput.current.value,
         })
+        commentInput.current.value = ""
         fetchProductComments()
       } catch (error) {
         toast({
@@ -109,6 +130,50 @@ const ProductDetail = () => {
     } else {
       toast({
         title: "Input",
+        description: "comment must be 10 characters long",
+      })
+    }
+  }
+
+  const deleteComment = async (commentId) => {
+    setComments(comments.filter((comment) => comment._id !== commentId))
+    try {
+      const response = await axios.delete(`/api/v1/comments/update/${commentId}`)
+      toast({
+        title: "Success",
+        description: response.data.message,
+      })
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Error while deleting comment",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const updateComment = async (commentId) => {
+    if(editCommentInput.current.value.length > 10){
+      try {
+        const response = await axios.patch(`/api/v1/comments/update/${commentId}`, {
+          content: editCommentInput.current.value,
+        })
+        editCommentInput.current.value = ""
+        fetchProductComments()
+        toast({
+          title: "Success",
+          description: response.data.message,
+        })
+      } catch (error) {
+        toast({
+          title: "Error",
+          description: "Error while updating comment",
+          variant: "destructive",
+        })
+      }
+    }else{
+      toast({
+        title: "comment",
         description: "comment must be 10 characters long",
       })
     }
@@ -216,12 +281,12 @@ const ProductDetail = () => {
           />
           <Button
             className="h-[39px] md:rounded-l-none md:absolute right-24 focus-visible:none"
-            onClick={submitComment}
+            onClick={authStatus ? submitComment : () => navigate("/sign-in")}
             disabled={isSubmittingComment}
           >
             {isSubmittingComment ? (
               <div className="flex">
-                <Loader2 className="animate-spin" /> 
+                <Loader2 className="animate-spin" />
                 <span>Submitting</span>
               </div>
             ) : (
@@ -251,23 +316,77 @@ const ProductDetail = () => {
           <div className="mx-6 py-3 flex flex-col gap-3 md:mx-auto md:w-3/4">
             {comments?.map((comment) => (
               <div key={comment._id}>
-                <div className="flex items-center gap-3 ">
-                  <img
-                    src={comment.owner?.avatar || "/images/default-user.png"}
-                    alt="user-avatar"
-                    className="rounded-full h-10 w-10 md:w-12 md:h-12 cursor-pointer"
-                    onClick={() => {
-                      navigate(`/${comment.owner?.username}`)
-                    }}
-                  />
-                  <h3
-                    className="font-semibold text-lg md:text-xl cursor-pointer"
-                    onClick={() => {
-                      navigate(`/${comment.owner?.username}`)
-                    }}
-                  >
-                    {comment.owner?.username}
-                  </h3>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 ">
+                    <img
+                      src={comment.owner?.avatar || "/images/default-user.png"}
+                      alt="user-avatar"
+                      className="rounded-full h-10 w-10 md:w-12 md:h-12 cursor-pointer"
+                      onClick={() => {
+                        navigate(`/${comment.owner?.username}`)
+                      }}
+                    />
+                    <h3
+                      className="font-semibold text-lg md:text-xl cursor-pointer"
+                      onClick={() => {
+                        navigate(`/${comment.owner?.username}`)
+                      }}
+                    >
+                      {comment.owner?.username}
+                    </h3>
+                  </div>
+                  <div className="edit">
+                    {userData._id === comment.owner?._id && (
+                      <Dialog>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger>
+                            <LucideMoreVertical />
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent>
+                            <DialogTrigger asChild>
+                              <DropdownMenuItem>
+                                <Edit2 className="mr-1 w-5" />
+                                <span>Edit</span>
+                              </DropdownMenuItem>
+                            </DialogTrigger>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                              onClick={() => deleteComment(comment._id)}
+                            >
+                              <Trash2 className="mr-1 w-5" />
+                              <span>Delete</span>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                        <DialogContent className="sm:max-w-[425px]">
+                          <DialogHeader>
+                            <DialogTitle>Edit Comment</DialogTitle>
+                          </DialogHeader>
+                          <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                              <Label htmlFor="name" className="text-right">
+                                Comment
+                              </Label>
+                              <Input
+                                id="edit-comment"
+                                defaultValue={comment.content}
+                                className="col-span-3"
+                                ref={editCommentInput}
+                              />
+                            </div>
+                          </div>
+                          <DialogFooter>
+                            <Button
+                              onClick={() => updateComment(comment._id)}
+                              type="button"
+                            >
+                              Save changes
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    )}
+                  </div>
                 </div>
                 <div className="md:text-lg">{comment.content}</div>
               </div>
