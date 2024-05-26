@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react"
 import { Container, Loader } from "../components"
 import { Link, useParams } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { login } from "@/redux/features/auth/authSlice.js"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import { useToast } from "@/components/ui/use-toast"
@@ -53,6 +54,7 @@ const ProductDetail = () => {
   const { productId } = useParams()
   const navigate = useNavigate()
   const { toast } = useToast()
+  const dispatch = useDispatch()
 
   const fetchProductDetails = async () => {
     setIsLoading(true)
@@ -97,6 +99,7 @@ const ProductDetail = () => {
         `/api/v1/users/addto-cart/${productId}`
       )
       setIsInCart(true)
+      dispatch(login(response.data.data))
       toast({
         title: "Success",
         description: response.data.message,

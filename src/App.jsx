@@ -11,7 +11,7 @@ function App() {
   const location = useLocation()
   const noNavbarRoutes = ["/sign-up", "/sign-in", "/verify"]
   const [isFetching, setIsFetching] = useState(false)
-
+  const auth = useSelector((state) => state.auth.status)
 
   //authentication
   useEffect(() => {
@@ -31,7 +31,7 @@ function App() {
       }
     }
     getCurrentUser()
-  }, [])
+  }, [auth])
 
   if (isFetching) {
     return (
