@@ -82,7 +82,7 @@ const LowerNavbar = () => {
         <Menu />
       </div>
       <nav
-        className={`flex justify-between md:items-center md:flex-row flex-col w-1/2  gap-10 pl-3 absolute rounded-md md:w-full z-50 md:dark:bg-[#020817] md:bg-[#ffffff] md:gap-0 md:static md:rounded-none md:pl-0 py-3 md:py-0 dark:bg-[#1e2025] bg-[#d4caca] ${isSidebar ? "tanslate-x-0" : "translate-x-[-114%]"} md:translate-x-0 transition-transform duration-300 ease-in-out shadow-sm md:shadow-none dark:shadow-black`}
+        className={`flex justify-between md:items-center md:flex-row flex-col w-1/2  gap-10 pl-3 absolute rounded-md md:w-full z-50 md:dark:bg-dark md:bg-light md:gap-0 md:static md:rounded-none md:pl-0 py-3 md:py-0 dark:bg-secDark bg-secLight ${isSidebar ? "tanslate-x-0" : "translate-x-[-114%]"} md:translate-x-0 transition-transform duration-300 ease-in-out shadow-sm md:shadow-none dark:shadow-black`}
       >
         {isAuthenticated && (
           <DropdownMenu>

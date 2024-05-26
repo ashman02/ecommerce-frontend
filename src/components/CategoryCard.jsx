@@ -9,7 +9,7 @@ const Category = ({
   
   const navigate = useNavigate()
   return (
-    <div className='dark:bg-[#1e2025] bg-[#d4caca] w-[45%] md:w-[30%] lg:w-[18%] h-1/3 cursor-pointer rounded-sm shadow-sm'
+    <div className='dark:bg-secDark bg-secLight w-[45%] md:w-[30%] lg:w-[18%] h-1/3 cursor-pointer rounded-sm shadow-sm'
     onClick={() => navigate(`/category/${title}/${id}`)}>
       <div className='md:h-56 h-32 overflow-hidden rounded-t-sm'>
 
