@@ -15,7 +15,13 @@ import {
 } from "@/components/ui/carousel"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-import { Edit2, Loader2, LucideMoreVertical, Trash2 } from "lucide-react"
+import {
+  Edit2,
+  Loader2,
+  LucideMoreVertical,
+  MoreVertical,
+  Trash2,
+} from "lucide-react"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -141,7 +147,9 @@ const ProductDetail = () => {
   const deleteComment = async (commentId) => {
     setComments(comments.filter((comment) => comment._id !== commentId))
     try {
-      const response = await axios.delete(`/api/v1/comments/update/${commentId}`)
+      const response = await axios.delete(
+        `/api/v1/comments/update/${commentId}`
+      )
       toast({
         title: "Success",
         description: response.data.message,
@@ -156,11 +164,14 @@ const ProductDetail = () => {
   }
 
   const updateComment = async (commentId) => {
-    if(editCommentInput.current.value.length > 10){
+    if (editCommentInput.current.value.length > 10) {
       try {
-        const response = await axios.patch(`/api/v1/comments/update/${commentId}`, {
-          content: editCommentInput.current.value,
-        })
+        const response = await axios.patch(
+          `/api/v1/comments/update/${commentId}`,
+          {
+            content: editCommentInput.current.value,
+          }
+        )
         editCommentInput.current.value = ""
         fetchProductComments()
         toast({
@@ -174,7 +185,7 @@ const ProductDetail = () => {
           variant: "destructive",
         })
       }
-    }else{
+    } else {
       toast({
         title: "comment",
         description: "comment must be 10 characters long",
@@ -202,7 +213,56 @@ const ProductDetail = () => {
 
   return (
     <Container>
-      <div>
+      <div className="relative">
+        {userData?._id === product.owner?._id && (
+          <div className="absolute right-0 md:right-10 lg:right-24">
+            <Dialog>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <LucideMoreVertical />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DialogTrigger asChild>
+                    <DropdownMenuItem>
+                      <Edit2 className="mr-1 w-5" />
+                      <span>Edit</span>
+                    </DropdownMenuItem>
+                  </DialogTrigger>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <Trash2 className="mr-1 w-5" />
+                    <span>Delete</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Edit Product</DialogTitle>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid grid-cols-4 items-center gap-4">
+                    <Label htmlFor="name" className="text-right">
+                      Title
+                    </Label>
+                    <Input
+                      id="edit-comment"
+                      defaultValue={product.title}
+                      className="col-span-3"
+                      
+                    />
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button
+                    type="button"
+                  >
+                    Save changes
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        )}
         <div className="w-full overflow-y-hidden md:flex items-center justify-center gap-10 pb-4">
           <div className="carousel">
             <Carousel className="w-1/2 md:w-full max-w-xs mx-auto max-h-80">

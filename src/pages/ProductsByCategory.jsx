@@ -52,7 +52,7 @@ const ProductsByCategory = () => {
         <div className="flex gap-5 flex-wrap items-center justify-center">
           {
             products.map((product) => (
-              <ProductCard key={product._id} id={product._id} title={product.title} price={product.price} img={product.image[0]} ownerImg={product.owner?.avatar} ownerUsername={product.owner?.username}/>
+              <ProductCard key={product._id} id={product._id} title={product.title} price={product.price} img={product.image[0]} ownerImg={product.owner?.avatar || "images/default-user.png"} ownerUsername={product.owner?.username}/>
             ))
           }
         </div>

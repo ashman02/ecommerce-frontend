@@ -21,6 +21,7 @@ import Signup from "./pages/Signup.jsx"
 import Verify from "./pages/Verify.jsx"
 import SignIn from "./pages/SignIn.jsx"
 import Profile from "./pages/Profile.jsx"
+import UplaodProduct from "./pages/UplaodProduct.jsx"
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: "/allcategories",
         element: <Category />,
+      },
+      {
+        path: "/upload",
+        element: <UplaodProduct />,
       },
       {
         path: "/cart",

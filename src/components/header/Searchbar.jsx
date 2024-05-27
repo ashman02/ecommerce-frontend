@@ -32,7 +32,7 @@ const Searchbar = () => {
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             type='text' placeholder='Search'
-                            className='bg-gray-300 text-lg px-2 py-1 rounded-md w-full focus:outline-none' />
+                            className='dark:bg-secDark dark:text-light text-dark text-lg px-2 py-1 rounded-md w-full focus:outline-none' />
                             
                             <img src="/images/search.png" alt=""
                              width={20} 

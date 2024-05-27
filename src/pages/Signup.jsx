@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import { setSignUp } from "../redux/features/signup/signupSlice.js"
 import { setVerify } from "../redux/features/verficationcode/verifySlice.js"
-import axios, { AxiosError } from "axios"
+import axios from "axios"
 import { useDebounceCallback } from "usehooks-ts"
 import {
   Form,
@@ -88,7 +88,7 @@ const Signup = () => {
 
   return (
     <div className="w-[98%] md:w-3/4 lg:w-1/2 mx-auto flex flex-col gap-5 mt-24">
-      <div className="dark:text-white text-center">
+      <div className="text-center">
         <h1 className="font-bold text-xl md:text-3xl">
           Welcome to Chobar Cart
         </h1>

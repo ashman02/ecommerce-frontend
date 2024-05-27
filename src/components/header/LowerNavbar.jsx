@@ -29,7 +29,6 @@ const LowerNavbar = () => {
   const { toast } = useToast()
   const dispatch = useDispatch()
 
-
   useEffect(() => {
     setIsAuthenticated(authStatus)
   }, [authStatus])
@@ -103,10 +102,12 @@ const LowerNavbar = () => {
               </NavLink>
 
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Upload />
-                <span>Upload</span>
-              </DropdownMenuItem>
+              <NavLink to="/upload">
+                <DropdownMenuItem>
+                  <Upload />
+                  <span>Upload</span>
+                </DropdownMenuItem>
+              </NavLink>
             </DropdownMenuContent>
           </DropdownMenu>
         )}
