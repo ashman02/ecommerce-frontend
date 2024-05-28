@@ -14,7 +14,7 @@ const ProductCard = ({ title, img, price, id, ownerUsername, ownerImg }) => {
       </div>
 
       {ownerImg && <div onClick={() => {navigate(`/${ownerUsername}`)}} className="flex gap-2 items-center pt-1 px-2">
-        <img className="w-8 h-8 rounded-full" src={ownerImg} alt="" />
+        <img className="w-8 h-8 rounded-full object-cover" src={ownerImg} alt="" />
         <h3 className="font-semibold">{ownerUsername}</h3>
       </div>}
       

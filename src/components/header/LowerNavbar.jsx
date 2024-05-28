@@ -87,10 +87,10 @@ const LowerNavbar = () => {
           <DropdownMenu>
             <DropdownMenuTrigger>
               <img
-                width={45}
+                
                 src={user?.avatar ? user.avatar : "/images/default-user.png"}
                 alt="user-profile"
-                className="cursor-pointer hover:bg-gray-300 duration-300 rounded-full p-1"
+                className="cursor-pointer hover:bg-gray-300 duration-300 rounded-full p-1 w-11 h-11 object-cover"
               />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
