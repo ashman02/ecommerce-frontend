@@ -141,23 +141,6 @@ const UplaodProduct = () => {
           <Label htmlFor="categories" className="md:text-xl">
             Categories
           </Label>
-          {/* <select
-            multiple
-            {...register("categories", {
-              required: "Please select at least one category",
-              max: {
-                value: 3,
-                message: "Please select no more than 3 categories",
-              },
-            })}
-            className="dark:bg-dark dark:text-light p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 custom-scrollbar"
-          >
-            {categories.map((category) => (
-              <option key={category._id} value={category._id}>
-                {category.title}
-              </option>
-            ))}
-          </select> */}
           <div
             className="flex flex-col gap-1 dark:bg-dark bg-white p-2 rounded-lg custom-scrollbar"
             style={{ maxHeight: "200px", overflowY: "scroll" }}

@@ -39,8 +39,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
+import { useForm } from "react-hook-form"
 
 const ProductDetail = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -49,6 +61,8 @@ const ProductDetail = () => {
   const [isInCart, setIsInCart] = useState(false)
   const [commentError, setCommentError] = useState(false)
   const [comments, setComments] = useState([])
+  const [isUpdatingProduct, setIsUpdatingProduct] = useState(false)
+  const [isDeletingProduct, setIsDeletingProduct] = useState(false)
 
   const [isSubmittingComment, setIsSubmittingComment] = useState(false)
   const commentInput = useRef()
@@ -193,6 +207,57 @@ const ProductDetail = () => {
     }
   }
 
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm()
+
+  const updateProduct = async (data) => {
+    setIsUpdatingProduct(true)
+    try {
+      const response = await axios.patch(
+        `/api/v1/products/product/${product._id}`,
+        data
+      )
+      toast({
+        title: "Success",
+        description: response.data.message,
+      })
+      fetchProductDetails()
+      setIsUpdatingProduct(false)
+    } catch (error) {
+      setIsUpdatingProduct(false)
+      toast({
+        title: "Error",
+        description: "Error while updating the product please try again later",
+        variant: "destructive",
+      })
+    }
+  }
+
+  const deleteProduct = async () => {
+    setIsDeletingProduct(true)
+    try {
+      const response = await axios.delete(
+        `/api/v1/products/product/${product._id}`
+      )
+      toast({
+        title: "Success",
+        description: response.data.message,
+      })
+      navigate(`/${userData.username}`)
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Error while deleting the product please try again later",
+        variant: "destructive",
+      })
+    } finally {
+      setIsDeletingProduct(false)
+    }
+  }
+
   if (isLoading) {
     return (
       <div>
@@ -217,49 +282,161 @@ const ProductDetail = () => {
         {userData?._id === product.owner?._id && (
           <div className="absolute right-0 md:right-10 lg:right-24">
             <Dialog>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <LucideMoreVertical />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DialogTrigger asChild>
-                    <DropdownMenuItem>
-                      <Edit2 className="mr-1 w-5" />
-                      <span>Edit</span>
-                    </DropdownMenuItem>
-                  </DialogTrigger>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <Trash2 className="mr-1 w-5" />
-                    <span>Delete</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                  <DialogTitle>Edit Product</DialogTitle>
-                </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid grid-cols-4 items-center gap-4">
-                    <Label htmlFor="name" className="text-right">
-                      Title
-                    </Label>
-                    <Input
-                      id="edit-comment"
-                      defaultValue={product.title}
-                      className="col-span-3"
-                      
-                    />
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button
-                    type="button"
-                  >
-                    Save changes
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
+              <AlertDialog>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <LucideMoreVertical />
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DialogTrigger asChild>
+                      <DropdownMenuItem className="cursor-pointer">
+                        <Edit2 className="mr-1 w-5" />
+                        <span>Edit</span>
+                      </DropdownMenuItem>
+                    </DialogTrigger>
+                    <DropdownMenuSeparator />
+                    <AlertDialogTrigger>
+                      <DropdownMenuItem className="cursor-pointer">
+                        <Trash2 className="mr-1 w-5" />
+                        <span>Delete</span>
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      your product.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={deleteProduct} disabled={isDeletingProduct}>
+                      {isDeletingProduct ? (
+                        <div className="flex items-center">
+                          <Loader2 className="animate-spin mr-2" />
+                          <span>Deleting</span>
+                        </div>
+                      ) : (
+                        <>Continue</>
+                      )}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+                <DialogContent className="sm:max-w-[425px]">
+                  <DialogHeader>
+                    <DialogTitle>Edit Product</DialogTitle>
+                    <DialogDescription>
+                      Please fill out the detail you want to change
+                    </DialogDescription>
+                  </DialogHeader>
+                  <form onSubmit={handleSubmit(updateProduct)}>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="name" className="text-right">
+                          Title
+                        </Label>
+                        <Input
+                          id="edit-title"
+                          defaultValue={product.title}
+                          className="col-span-3"
+                          maxLength="100"
+                          {...register("title", {
+                            required: "Please enter a title",
+                            maxLength: {
+                              value: 100,
+                              message:
+                                "Title should be less than 100 characters",
+                            },
+                          })}
+                        />
+                        {errors.title && (
+                          <p className="mt-2 text-sm text-red-500">
+                            {errors.title.message}
+                          </p>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="name" className="text-right">
+                          Description
+                        </Label>
+                        <Input
+                          id="edit-description"
+                          defaultValue={product.description}
+                          className="col-span-3"
+                          maxLength="500"
+                          {...register("description", {
+                            required: "Please enter a description",
+                            maxLength: {
+                              value: 500,
+                              message:
+                                "Description should be less than 500 characters",
+                            },
+                          })}
+                        />
+                        {errors.description && (
+                          <p className="mt-2 text-sm text-red-500">
+                            {errors.description.message}
+                          </p>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="name" className="text-right">
+                          Price
+                        </Label>
+                        <Input
+                          id="edit-price"
+                          defaultValue={product.price}
+                          className="col-span-3"
+                          type="number"
+                          {...register("price", {
+                            required: "Please enter a price",
+                          })}
+                        />
+                        {errors.price && (
+                          <p className="mt-2 text-sm text-red-500">
+                            {errors.price.message}
+                          </p>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="name" className="text-right">
+                          Gender
+                        </Label>
+                        <select
+                          id="gender"
+                          defaultValue={product.gender}
+                          {...register("gender")}
+                          className="dark:bg-dark dark:text-light p-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                          <option value=" ">All can use</option>
+                          <option value="men">Men</option>
+                          <option value="women">Women</option>
+                          <option value="boys">Boys</option>
+                          <option value="girls">Girls</option>
+                          <option value="kids">Kids</option>
+                        </select>
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <Button type="submit" disabled={isUpdatingProduct}>
+                        {isUpdatingProduct ? (
+                          <div className="flex items-center">
+                            <Loader2 className="animate-spin mr-2" />
+                            <span>Saving</span>
+                          </div>
+                        ) : (
+                          <>Save Changes</>
+                        )}
+                      </Button>
+                    </DialogFooter>
+                  </form>
+                </DialogContent>
+              </AlertDialog>
             </Dialog>
           </div>
         )}
@@ -348,7 +525,7 @@ const ProductDetail = () => {
             disabled={isSubmittingComment}
           >
             {isSubmittingComment ? (
-              <div className="flex">
+              <div className="flex ">
                 <Loader2 className="animate-spin" />
                 <span>Submitting</span>
               </div>
