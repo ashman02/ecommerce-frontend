@@ -1,5 +1,4 @@
-import React, { useRef, useState } from "react"
-import Button from "./Button"
+import React from "react"
 import { useNavigate } from "react-router-dom"
 import { X } from "lucide-react"
 

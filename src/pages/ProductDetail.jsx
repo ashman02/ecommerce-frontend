@@ -114,11 +114,11 @@ const ProductDetail = () => {
   }, [authStatus])
 
   const addToCart = async () => {
+    setIsInCart(true)
     try {
       const response = await axios.patch(
         `/api/v1/users/addto-cart/${productId}`
       )
-      setIsInCart(true)
       dispatch(login(response.data.data))
       toast({
         title: "Success",
@@ -478,7 +478,7 @@ const ProductDetail = () => {
               <img
                 src={product.owner?.avatar || "/images/default-user.png"}
                 alt=""
-                className="rounded-full h-10 w-10 md:w-12 md:h-12"
+                className="rounded-full h-10 w-10 md:w-12 md:h-12 object-cover"
               />
               <h3 className="font-semibold text-xl">
                 {product.owner?.username}
@@ -561,7 +561,7 @@ const ProductDetail = () => {
                     <img
                       src={comment.owner?.avatar || "/images/default-user.png"}
                       alt="user-avatar"
-                      className="rounded-full h-10 w-10 md:w-12 md:h-12 cursor-pointer"
+                      className="rounded-full h-10 w-10 md:w-12 md:h-12 cursor-pointer object-cover"
                       onClick={() => {
                         navigate(`/${comment.owner?.username}`)
                       }}

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Category as CategoryComponent, Container, Loader } from "../components"
-import {useGetCategoriesQuery} from "../redux/services/productApi"
 import axios from 'axios'
 
 
@@ -37,9 +36,11 @@ const Category = () => {
 
   return (
     <Container>
-      <div className='flex flex-wrap justify-center gap-5 mt-10'>
+      <div className='flex flex-wrap gap-5 mt-10'>
        {isLoading ? (
-        <Loader/>
+        <div className='flex justify-center items-center w-full'>
+          <Loader/>
+        </div>
        ) : (
         categories.map(item => (
           <CategoryComponent key={item._id} title={item.title} id={item._id} img={item.image} />

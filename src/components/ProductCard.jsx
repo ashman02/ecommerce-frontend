@@ -19,7 +19,7 @@ const ProductCard = ({ title, img, price, id, ownerUsername, ownerImg }) => {
       </div>}
       
       <div className="text py-3 px-2">
-        <h3 className="md:text-lg font-semibold min-h-14 max-h-14 overflow-hidden leading-4">
+        <h3 className="md:text-lg font-semibold  min-h-14 max-h-14 overflow-hidden leading-4">
           {title}
         </h3>
         <div>{price}$</div>

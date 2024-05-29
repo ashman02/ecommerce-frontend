@@ -64,7 +64,7 @@ const LowerNavbar = () => {
       active: isAuthenticated,
     },
     {
-      name: "Cart",
+      name: "Saved",
       slug: "/cart",
       active: isAuthenticated,
     },
@@ -75,9 +75,13 @@ const LowerNavbar = () => {
     },
   ]
 
+  const closeNavbar = () => {
+    setIsSidebar(false)
+  }
+
   return (
     <Container>
-      <div onClick={() => setIsSidebar(!isSidebar)} className="md:hidden">
+      <div onClick={() => setIsSidebar(!isSidebar)} className="md:hidden w-fit">
         <Menu />
       </div>
       <nav
@@ -95,7 +99,7 @@ const LowerNavbar = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <NavLink to={`/${user.username}`}>
-                <DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer" onClick={closeNavbar}>
                   <User />
                   <span>Profile</span>
                 </DropdownMenuItem>
@@ -103,7 +107,7 @@ const LowerNavbar = () => {
 
               <DropdownMenuSeparator />
               <NavLink to="/upload">
-                <DropdownMenuItem>
+                <DropdownMenuItem className="cursor-pointer" onClick={closeNavbar}>
                   <Upload />
                   <span>Upload</span>
                 </DropdownMenuItem>
@@ -116,7 +120,7 @@ const LowerNavbar = () => {
         <ul className="flex gap-4 md:justify-center md:items-center md:flex-row flex-col">
           {navItems.map((item) =>
             item.active ? (
-              <li key={item.name}>
+              <li key={item.name} onClick={closeNavbar}>
                 <NavLink
                   to={item.slug}
                   className={({ isActive }) =>
@@ -152,10 +156,10 @@ const LowerNavbar = () => {
           </div>
         ) : (
           <div className="flex md:flex-row flex-col md:items-center justify-center gap-3">
-            <NavLink to="/sign-in">
+            <NavLink to="/sign-in" onClick={closeNavbar}>
               <Button variant="outline">Log-in</Button>
             </NavLink>
-            <NavLink to="/sign-up">
+            <NavLink to="/sign-up" onClick={closeNavbar}>
               <Button variant="outline">Sign-up</Button>
             </NavLink>
           </div>

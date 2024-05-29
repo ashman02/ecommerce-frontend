@@ -9,9 +9,9 @@ import { Provider } from "react-redux"
 import { ThemeProvider } from "@/components/theme-provider"
 
 import { RouterProvider, createBrowserRouter } from "react-router-dom"
+import { Protected } from "./components/index.js"
 import Home from "./pages/Home.jsx"
 import Search from "./pages/Search.jsx"
-import Buy from "./pages/Buy.jsx"
 import Cart from "./pages/Cart.jsx"
 import Category from "./pages/Category.jsx"
 import About from "./pages/About.jsx"
@@ -30,15 +30,27 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/sign-up",
-        element: <Signup />,
+        element:(
+          <Protected authentication={false}>
+            <Signup />
+          </Protected>
+        ),
       },
       {
         path: "/verify",
-        element: <Verify />,
+        element: (
+          <Protected authentication={false}>
+            <Verify />
+          </Protected>
+        ),
       },
       {
         path: "/sign-in",
-        element: <SignIn />,
+        element: (
+          <Protected authentication={false}>
+            <SignIn />
+          </Protected>
+        ),
       },
 
       {
@@ -47,7 +59,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/:username",
-        element: <Profile/>,
+        element: (
+          <Protected authentication>
+            <Profile />
+          </Protected>
+        ),
       },
       {
         path: "/search",
@@ -59,15 +75,19 @@ const router = createBrowserRouter([
       },
       {
         path: "/upload",
-        element: <UplaodProduct />,
+        element: (
+          <Protected authentication>
+            <UplaodProduct />
+          </Protected>
+        ),
       },
       {
         path: "/cart",
-        element: <Cart />,
-      },
-      {
-        path: "/buy",
-        element: <Buy />,
+        element: (
+          <Protected authentication>
+            <Cart />
+          </Protected>
+        ),
       },
       {
         path: "/about",

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import { ProductCard, Container, Loader } from "../components"
+import { useNavigate } from "react-router-dom"
 import axios from "axios"
 
 const Home = () => {
@@ -7,6 +8,7 @@ const Home = () => {
   const [isProductLoading, setIsProductLoading] = useState(false)
   const [categories, setCategories] = useState([])
   const [products, setProducts] = useState([])
+  const navigate = useNavigate()
 
   //mouse scrolling
   const containerRef = useRef(null)
@@ -79,6 +81,7 @@ const Home = () => {
             <div
               className="flex flex-col items-center justify-center cursor-pointer"
               key={category._id}
+              onClick={() => navigate(`/category/${category.title}/${category._id}`)}
             >
               <img
                 src={category.image}
@@ -91,7 +94,7 @@ const Home = () => {
         </div>
         <div className="mt-5 flex flex-wrap gap-3">
           {isProductLoading ? (
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center w-full">
               <Loader />
             </div>
           ) : (
