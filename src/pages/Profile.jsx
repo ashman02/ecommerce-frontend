@@ -57,6 +57,7 @@ const Profile = () => {
       const response = await axios.get(`/api/v1/users/get-account/${username}`)
       setUser(response.data.data[0])
       getUserProducts(response.data.data[0]._id)
+      console.log(response.data)
 
       //optimistic ui
       setIsFollowing(response.data.data[0].isSubscribed)
@@ -292,8 +293,9 @@ const Profile = () => {
         {/* bio and other user details */}
         <div className="tiertwo">
           <div className="name font-bold">{user.fullName}</div>
+          <div className="font-semibold">{user.location || "no location added by user"}</div>
           <div className="bio ">
-            {user.bio || "Click on edit profile to add bio"}
+            {user.bio || "no bio added by user"}
           </div>
         </div>
         <Dialog>
@@ -387,6 +389,18 @@ const Profile = () => {
                       {errors.username.message}
                     </p>
                   )}
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="location" className="text-right">
+                    Loction
+                  </Label>
+                  <Input
+                    id="location"
+                    defaultValue={user.location || ""}
+                    className="col-span-3"
+                    placeholder="city,district,state"
+                    {...register("location")}
+                  />
                 </div>
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="bio" className="text-right">

@@ -23,7 +23,7 @@ const Category = () => {
     }
   }
 
-
+  
   useEffect(() => {
     fetchCategories()
   }, [])

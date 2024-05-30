@@ -2,6 +2,9 @@ import React, { useEffect, useRef, useState } from "react"
 import { ProductCard, Container, Loader } from "../components"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
+import { useSelector, useDispatch } from "react-redux"
+import { login } from "@/redux/features/auth/authSlice"
+import { useToast } from "@/components/ui/use-toast"
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -9,6 +12,10 @@ const Home = () => {
   const [categories, setCategories] = useState([])
   const [products, setProducts] = useState([])
   const navigate = useNavigate()
+  const {toast} = useToast()
+  const dispatch = useDispatch()
+
+  const currentUser = useSelector((state) => state.auth.data)
 
   //mouse scrolling
   const containerRef = useRef(null)
@@ -42,6 +49,24 @@ const Home = () => {
     getCategories()
     getProducts()
   }, [])
+
+  const addToCart = async (productId) => {
+    try {
+      const response = await axios.patch(
+        `/api/v1/users/addto-cart/${productId}`
+      )
+      dispatch(login(response.data.data))
+      toast({
+        title: "Success",
+        description: response.data.message,
+      })
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Could not save the product",
+      })
+    }
+  }
 
   //mouse scrolling functions
   const handleMouseDown = (event) => {
@@ -100,7 +125,7 @@ const Home = () => {
           ) : (
             // check sorting of this section
             products.map(product => (
-              <ProductCard key={product._id} title={product.title} price={product.price} id={product._id} img={product.image[0]} ownerImg={product.owner.avatar || "/images/default-user.png"} ownerUsername={product.owner.username}/>
+              <ProductCard key={product._id} title={product.title} price={product.price} id={product._id} img={product.image[0]} ownerImg={product.owner.avatar || "/images/default-user.png"} ownerUsername={product.owner.username} saved={currentUser?.cart.includes(product._id) ? true : false} handleAddToCart={addToCart}/>
             ))
           )}
         </div>

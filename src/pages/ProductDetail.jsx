@@ -20,6 +20,7 @@ import {
   Loader2,
   LucideMoreVertical,
   MoreVertical,
+  ThumbsUp,
   Trash2,
 } from "lucide-react"
 import {
@@ -63,6 +64,9 @@ const ProductDetail = () => {
   const [comments, setComments] = useState([])
   const [isUpdatingProduct, setIsUpdatingProduct] = useState(false)
   const [isDeletingProduct, setIsDeletingProduct] = useState(false)
+  const [isLiked, setIsLiked] = useState(false)
+  const [likeId, setLikeId] = useState(null)
+  const [likeCount, setLikeCount] = useState(0)
 
   const [isSubmittingComment, setIsSubmittingComment] = useState(false)
   const commentInput = useRef()
@@ -108,9 +112,23 @@ const ProductDetail = () => {
     }
   }
 
+  const fetchProductLikes = async () => {
+    try {
+      const response = await axios.get(`/api/v1/likes/product/${productId}`)
+      setLikeCount(response.data.data.totalLikes)
+      setIsLiked(response.data.data.isUserLiked)
+      if(response.data.data.isUserLiked){
+        setLikeId(response.data.data.likeId)
+      }
+    } catch (error) {
+      setLikeCount(0)
+    }
+  }
+
   useEffect(() => {
     fetchProductDetails()
     fetchProductComments()
+    fetchProductLikes()
   }, [authStatus])
 
   const addToCart = async () => {
@@ -258,6 +276,33 @@ const ProductDetail = () => {
     }
   }
 
+  const handleToggleLike = async () => {
+    setIsLiked(true)
+    setLikeCount(likeCount + 1)
+    try {
+      const response = await axios.post(`/api/v1/likes/product/${productId}`)
+      setLikeId(response.data.data._id)
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Error while liking the product",
+      })
+    }
+  }
+
+  const handleUntoggleLike = async () => {
+    setIsLiked(false)
+    setLikeCount(likeCount - 1)
+    try {
+      const response = await axios.delete(`/api/v1/likes/delete-product-like/${likeId}`)
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Error while unliking the product",
+      })
+    }
+  }
+
   if (isLoading) {
     return (
       <div>
@@ -315,7 +360,10 @@ const ProductDetail = () => {
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={deleteProduct} disabled={isDeletingProduct}>
+                    <AlertDialogAction
+                      onClick={deleteProduct}
+                      disabled={isDeletingProduct}
+                    >
                       {isDeletingProduct ? (
                         <div className="flex items-center">
                           <Loader2 className="animate-spin mr-2" />
@@ -469,20 +517,35 @@ const ProductDetail = () => {
               <p className="font-bold text-xl md:text-3xl">₹{product.price}</p>
               {product.gender && <p>{product.gender}</p>}
             </div>
-            <div
-              className="flex items-center gap-3 pl-6 cursor-pointer"
-              onClick={() => {
-                navigate(`/${product.owner?.username}`)
-              }}
-            >
-              <img
-                src={product.owner?.avatar || "/images/default-user.png"}
-                alt=""
-                className="rounded-full h-10 w-10 md:w-12 md:h-12 object-cover"
-              />
-              <h3 className="font-semibold text-xl">
-                {product.owner?.username}
-              </h3>
+            <div className="flex items-center justify-between">
+              <div
+                className="flex items-center gap-3 pl-6 cursor-pointer"
+                onClick={() => {
+                  navigate(`/${product.owner?.username}`)
+                }}
+              >
+                <img
+                  src={product.owner?.avatar || "/images/default-user.png"}
+                  alt=""
+                  className="rounded-full h-10 w-10 md:w-12 md:h-12 object-cover"
+                />
+                <h3 className="font-semibold text-xl">
+                  {product.owner?.username}
+                </h3>
+              </div>
+              <div className="mr-7">
+                {isLiked ? (
+                  <div className="flex items-center gap-2">
+                    <span>{likeCount}</span>
+                    <ThumbsUp fill="#0e48bd" color="#0e48bd" className="cursor-pointer w-5 h-5" onClick={handleUntoggleLike}/>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <span>{likeCount}</span>
+                    <ThumbsUp color="#0e48bd" onClick={handleToggleLike} className="cursor-pointer w-5 h-5"/>
+                  </div>
+                )}
+              </div>
             </div>
             <div className="save">
               {isInCart ? (

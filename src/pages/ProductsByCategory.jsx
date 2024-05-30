@@ -2,11 +2,18 @@ import React, { useEffect, useState } from "react"
 import { Container, ProductCard, Loader } from "../components"
 import { useParams } from "react-router-dom"
 import axios from "axios"
+import { useDispatch, useSelector } from "react-redux"
+import { login } from "@/redux/features/auth/authSlice"
+import { useToast } from "@/components/ui/use-toast"
 
 const ProductsByCategory = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isError, setIsError] = useState(false)
   const [products, setProducts] = useState([])
+
+  const currentUser = useSelector((state) => state.auth.data)
+  const dispatch = useDispatch()
+  const {toast} = useToast()
 
   const {categoryId } = useParams()
   const getProducts = async () => {
@@ -27,6 +34,24 @@ const ProductsByCategory = () => {
   useEffect(() => {
     getProducts()
   }, [])
+
+  const addToCart = async (productId) => {
+    try {
+      const response = await axios.patch(
+        `/api/v1/users/addto-cart/${productId}`
+      )
+      dispatch(login(response.data.data))
+      toast({
+        title: "Success",
+        description: response.data.message,
+      })
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Could not save the product",
+      })
+    }
+  }
 
   if (isError) {
     return (
@@ -52,7 +77,7 @@ const ProductsByCategory = () => {
         <div className="flex gap-5 flex-wrap items-center justify-center">
           {
             products.map((product) => (
-              <ProductCard key={product._id} id={product._id} title={product.title} price={product.price} img={product.image[0]} ownerImg={product.owner?.avatar || "images/default-user.png"} ownerUsername={product.owner?.username}/>
+              <ProductCard key={product._id} id={product._id} title={product.title} price={product.price} img={product.image[0]} ownerImg={product.owner?.avatar || "images/default-user.png"} ownerUsername={product.owner?.username} saved={currentUser?.cart.includes(product._id) ? true : false} handleAddToCart={addToCart}/>
             ))
           }
         </div>

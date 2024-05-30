@@ -228,7 +228,7 @@ const Search = () => {
                     </div>
                     <div>
                       <h1 className="font-bold text-xl">{user.username}</h1>
-                      <h3>{user.fullName}</h3>
+                      <h3>{user.location || user.fullName} </h3>
                     </div>
                   </div>
                 ))}
