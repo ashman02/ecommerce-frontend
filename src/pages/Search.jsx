@@ -113,60 +113,62 @@ const Search = () => {
                 Search for Users
               </Label>
             </div>
-            {!isSearchingForUser && (
-              <div>
-                <h2>Sort By</h2>
-                <RadioGroup defaultValue="low" className="flex md:flex-col  ">
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem
-                      value="newest"
-                      id="option-one"
-                      onClick={handleSortChange}
-                    />
-                    <Label htmlFor="option-one">Newest first</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem
-                      value="low"
-                      id="option-two"
-                      onClick={handleSortChange}
-                    />
-                    <Label htmlFor="option-two">Price-Low to High</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem
-                      value="high"
-                      id="option-two"
-                      onClick={handleSortChange}
-                    />
-                    <Label htmlFor="option-three">Price-High to Low</Label>
-                  </div>
-                </RadioGroup>
-              </div>
-            )}
-            {products[0]?.gender && !isSearchingForUser && (
-              <div className="gender pt-5">
-                <Select onValueChange={handleGenderChange}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Gender" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="men">Men</SelectItem>
-                    <SelectItem value="women">Women</SelectItem>
-                    <SelectItem value="boys">Boys</SelectItem>
-                    <SelectItem value="girls">Girls</SelectItem>
-                    <SelectItem value="kids">Kids</SelectItem>
-                    <SelectItem value=" ">All</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            )}
+            <div className={`flex justify-between items-start md:flex-col w-[97vw] md:w-full md:mb-0 ${isSearchingForUser ? "mb-0" : "mb-36"}`}>
+              {!isSearchingForUser && (
+                <div>
+                  <h2>Sort By</h2>
+                  <RadioGroup defaultValue="low" className="flex flex-col">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        value="newest"
+                        id="option-one"
+                        onClick={handleSortChange}
+                      />
+                      <Label htmlFor="option-one">Newest first</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        value="low"
+                        id="option-two"
+                        onClick={handleSortChange}
+                      />
+                      <Label htmlFor="option-two">Price-Low to High</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        value="high"
+                        id="option-two"
+                        onClick={handleSortChange}
+                      />
+                      <Label htmlFor="option-three">Price-High to Low</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+              )}
+              {products[0]?.gender && !isSearchingForUser && (
+                <div className="gender pt-5">
+                  <Select onValueChange={handleGenderChange}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Gender" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="men">Men</SelectItem>
+                      <SelectItem value="women">Women</SelectItem>
+                      <SelectItem value="boys">Boys</SelectItem>
+                      <SelectItem value="girls">Girls</SelectItem>
+                      <SelectItem value="kids">Kids</SelectItem>
+                      <SelectItem value=" ">All</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+            </div>
           </div>
           {!isSearchingForUser && (
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 w-full">
               {isLoading ? (
                 <>
-                  <div className="flex items-center justify-center">
+                  <div className="flex items-center justify-center  md:w-[45vw] w-[97vw] ">
                     <Loader />
                   </div>
                 </>
@@ -203,37 +205,44 @@ const Search = () => {
               </div>
             </div>
           )}
-          {isSearchingForUser &&
-            (isLoading ? (
-              <>
-                <div className="flex items-center justify-center">
-                  <Loader />
-                </div>
-              </>
-            ) : isError ? (
-              <div className="text-center md:text-2xl text-xl font-bold">
-                No User Found
-              </div>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {users.map((user) => (
-                  // you can make a separate component for this
-                  <div className="flex gap-2 items-center cursor-pointer" onClick={() => navigate(`/${user.username}`)}>
-                    <div>
-                      <img
-                        src={user.avatar || "/images/default-user.png"}
-                        alt="user-profile"
-                        className="rounded-full h-10 w-10 md:w-12 md:h-12 cursor-pointer object-cover"
-                      />
-                    </div>
-                    <div>
-                      <h1 className="font-bold text-xl">{user.username}</h1>
-                      <h3>{user.location || user.fullName} </h3>
-                    </div>
+          {isSearchingForUser && (
+            <div>
+              {isLoading ? (
+                <>
+                  <div className="flex items-center justify-center md:w-[45vw] w-[97vw] ">
+                    <Loader />
                   </div>
-                ))}
-              </div>
-            ))}
+                </>
+              ) : isError ? (
+                <div className="text-center md:text-2xl text-xl font-bold">
+                  No User Found
+                </div>
+              ) : (
+                <div className="flex flex-col gap-3">
+                  {users.map((user) => (
+                    // you can make a separate component for this
+                    <div
+                      key={user._id}
+                      className="flex gap-2 items-center cursor-pointer"
+                      onClick={() => navigate(`/${user.username}`)}
+                    >
+                      <div>
+                        <img
+                          src={user.avatar || "/images/default-user.png"}
+                          alt="user-profile"
+                          className="rounded-full h-10 w-10 md:w-12 md:h-12 cursor-pointer object-cover"
+                        />
+                      </div>
+                      <div>
+                        <h1 className="font-bold text-xl">{user.username}</h1>
+                        <h3>{user.location || user.fullName} </h3>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </Container>
     </>

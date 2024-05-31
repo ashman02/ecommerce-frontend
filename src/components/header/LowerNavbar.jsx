@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Container } from "../index"
-import { NavLink } from "react-router-dom"
+import { NavLink, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { Button } from "../ui/button"
 import axios from "axios"
@@ -28,6 +28,7 @@ const LowerNavbar = () => {
 
   const { toast } = useToast()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   useEffect(() => {
     setIsAuthenticated(authStatus)
@@ -37,6 +38,7 @@ const LowerNavbar = () => {
     setIsLoggingOut(true)
     try {
       const response = await axios.post("/api/v1/users/logout")
+      navigate("/")
       dispatch(logout())
       toast({
         title: "Success",

@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 
 @layer base {
   :root {
@@ -111,4 +111,24 @@
 
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: #777777; /* Hover state */
+}
+
+
+.cat-container::-webkit-scrollbar {
+  width: 8px;
+  height: 4px;
+}
+
+.cat-container::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+
+.cat-container::-webkit-scrollbar-thumb {
+  background-color: #888888;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cat-container::-webkit-scrollbar-thumb:hover {
+  background-color: #555555;
 }

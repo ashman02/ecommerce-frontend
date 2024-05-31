@@ -1,10 +1,13 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useState, lazy, Suspense } from "react"
 import { ProductCard, Container, Loader } from "../components"
 import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import { useSelector, useDispatch } from "react-redux"
 import { login } from "@/redux/features/auth/authSlice"
 import { useToast } from "@/components/ui/use-toast"
+import { Skeleton } from "@/components/ui/skeleton"
+
+const HomeCategory = lazy(() => import("../components/HomeCategory"))
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -17,11 +20,6 @@ const Home = () => {
 
   const currentUser = useSelector((state) => state.auth.data)
 
-  //mouse scrolling
-  const containerRef = useRef(null)
-  const [isDragging, setIsDragging] = useState(false)
-  const [startX, setStartX] = useState(null)
-  const [scrollLeft, setScrollLeft] = useState(0)
 
   const getCategories = async () => {
     setIsLoading(true)
@@ -68,53 +66,26 @@ const Home = () => {
     }
   }
 
-  //mouse scrolling functions
-  const handleMouseDown = (event) => {
-    if (event.button !== 0) return
-    setIsDragging(true)
-    setStartX(event.pageX - containerRef.current.offsetLeft)
-    setScrollLeft(containerRef.current.scrollLeft)
-  }
-
-  const handleMouseMove = (event) => {
-    if (!isDragging) return
-    const x = event.pageX - containerRef.current.offsetLeft
-    const walk = (x - startX) * 2
-    containerRef.current.scrollLeft = scrollLeft - walk
-  }
-
-  const handleMouseUp = () => {
-    setIsDragging(false)
-  }
-
-  const handleMouseLeave = () => {
-    setIsDragging(false)
-  }
 
   return (
     <>
       <Container>
         <div
-          className="flex gap-5 overflow-x-scroll no-scrollbar"
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseLeave}
-          ref={containerRef}
+          className="cat-container flex gap-5 overflow-x-scroll"
         >
           {categories.map((category) => (
-            <div
-              className="flex flex-col items-center justify-center cursor-pointer"
-              key={category._id}
-              onClick={() => navigate(`/category/${category.title}/${category._id}`)}
-            >
-              <img
-                src={category.image}
-                alt={category.title}
-                className="rounded-full h-12 w-12 md:w-16 md:h-16"
-              />
-              <h3 className="font-semibold md:text-lg">{category.title}</h3>
+            <Suspense fallback={
+              <div key={category._id} className="flex items-center justify-center flex-col gap-2">
+            <div>
+              <Skeleton className="rounded-full h-12 w-12 md:w-16 md:h-16"/>
             </div>
+            <div>
+              <Skeleton className="w-20 h-4 pb-1"/>
+            </div>
+              </div>
+          }>
+              <HomeCategory key={category._id} id={category._id} title={category.title} img={category.image}/>
+            </Suspense>
           ))}
         </div>
         <div className="mt-5 flex flex-wrap gap-3">

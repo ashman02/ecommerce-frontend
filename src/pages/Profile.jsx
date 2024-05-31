@@ -57,7 +57,6 @@ const Profile = () => {
       const response = await axios.get(`/api/v1/users/get-account/${username}`)
       setUser(response.data.data[0])
       getUserProducts(response.data.data[0]._id)
-      console.log(response.data)
 
       //optimistic ui
       setIsFollowing(response.data.data[0].isSubscribed)

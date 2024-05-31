@@ -1,7 +1,7 @@
 import Navbar from "./header/Navbar";
 import Container from "./Container";
 import Logo from "./Logo";
-import Category from "./CategoryCard";
+import CategoryCard from "./CategoryCard";
 import ProductCard from "./ProductCard"
 import Loader from "./Loader";
 import Protected from "./AuthLayout";
@@ -15,7 +15,7 @@ export {
     Logo,
     CartCard,
     Loader,
-    Category,
+    CategoryCard,
     ProductCard,
     Footer,
     Protected

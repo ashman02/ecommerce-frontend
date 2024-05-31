@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
-const Category = ({
+const CategoryCard = ({
   img, 
   title,
   id,
@@ -21,4 +21,4 @@ const Category = ({
   )
 }
 
-export default Category
+export default CategoryCard
