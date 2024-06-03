@@ -24,7 +24,7 @@ const Home = () => {
   const getCategories = async () => {
     setIsLoading(true)
     try {
-      const response = await axios.get("/api/v1/category/get-categories")
+      const response = await axios.get("https://chobarcart-api.onrender.com/api/v1/category/get-categories")
       setCategories(response.data.data)
       setIsLoading(false)
     } catch (error) {
