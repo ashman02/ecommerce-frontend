@@ -74,7 +74,7 @@ const Home = () => {
           className="cat-container flex gap-5 overflow-x-scroll"
         >
           {categories.map((category) => (
-            <Suspense fallback={
+            <Suspense key={category._id} fallback={
               <div key={category._id} className="flex items-center justify-center flex-col gap-2">
             <div>
               <Skeleton className="rounded-full h-12 w-12 md:w-16 md:h-16"/>
