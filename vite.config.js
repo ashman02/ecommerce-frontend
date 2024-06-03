@@ -6,7 +6,7 @@ import path from "path"
 export default defineConfig({
   server : {
     proxy : {
-      '/api/v1' : 'https://chobarcart-api.onrender.com'
+      '/api/v1' : 'https://chobarcart-api.onrender.com/'
     }
   },
   plugins: [react()],
