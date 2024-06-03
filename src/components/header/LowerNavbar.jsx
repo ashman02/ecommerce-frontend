@@ -39,7 +39,7 @@ const LowerNavbar = () => {
     setIsAuthenticated(false)
     try {
       navigate("/")
-      const response = await axios.post("/api/v1/users/logout")
+      const response = await axios.post("https://chobarcart-api.onrender.com/api/v1/users/logout")
       dispatch(logout())
       toast({
         title: "Success",
