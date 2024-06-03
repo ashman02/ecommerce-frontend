@@ -27,6 +27,8 @@ const Verify = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const userData = useSelector((state) => state.signup.value)
   const verifyCode = useSelector((state) => state.verify.value)
+  console.log(verifyCode)
+  console.log(userData)
 
   const { toast } = useToast()
   const navigate = useNavigate()
@@ -42,6 +44,7 @@ const Verify = () => {
   const onSubmit = async (data) => {
     setIsSubmitting(true)
     if (data.otp == verifyCode) {
+      console.log("I am trying")
       try {
         const response = await axios.post("/api/v1/users/register", userData)
         toast({

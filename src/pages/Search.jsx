@@ -82,7 +82,7 @@ const Search = () => {
     const value = event.target.value
     if (value === "newest") {
       setSortBy("createdAt")
-      setSortType("asc")
+      setSortType("desc")
     } else if (value === "low") {
       setSortBy("price")
       setSortType("asc")

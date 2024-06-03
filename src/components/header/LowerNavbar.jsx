@@ -36,9 +36,10 @@ const LowerNavbar = () => {
 
   const handleLogout = async () => {
     setIsLoggingOut(true)
+    setIsAuthenticated(false)
     try {
-      const response = await axios.post("/api/v1/users/logout")
       navigate("/")
+      const response = await axios.post("/api/v1/users/logout")
       dispatch(logout())
       toast({
         title: "Success",
