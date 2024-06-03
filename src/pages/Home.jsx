@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { login } from "@/redux/features/auth/authSlice"
 import { useToast } from "@/components/ui/use-toast"
 import { Skeleton } from "@/components/ui/skeleton"
+import axiosInstance from "axiosConfig"
 
 const HomeCategory = lazy(() => import("../components/HomeCategory"))
 
@@ -24,7 +25,7 @@ const Home = () => {
   const getCategories = async () => {
     setIsLoading(true)
     try {
-      const response = await axios.get("https://chobarcart-api.onrender.com/api/v1/category/get-categories")
+      const response = await axiosInstance.get("category/get-categories")
       setCategories(response.data.data)
       setIsLoading(false)
     } catch (error) {
@@ -35,7 +36,7 @@ const Home = () => {
   const getProducts = async () => {
     setIsProductLoading(true)
     try {
-      const response = await axios.get("https://chobarcart-api.onrender.com/api/v1/products/home-products")
+      const response = await axiosInstance.get("products/home-products")
       setProducts(response.data.data)
       setIsProductLoading(false)
     } catch (error) {
@@ -50,8 +51,8 @@ const Home = () => {
 
   const addToCart = async (productId) => {
     try {
-      const response = await axios.patch(
-        `https://chobarcart-api.onrender.com/api/v1/users/addto-cart/${productId}`
+      const response = await axiosInstance.patch(
+        `users/addto-cart/${productId}`
       )
       dispatch(login(response.data.data))
       toast({

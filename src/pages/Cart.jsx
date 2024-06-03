@@ -4,6 +4,7 @@ import axios from "axios"
 import { useToast } from "@/components/ui/use-toast"
 import { useDispatch } from "react-redux"
 import { login } from "@/redux/features/auth/authSlice"
+import axiosInstance from "axiosConfig"
 
 
 const Cart = () => {
@@ -17,7 +18,7 @@ const Cart = () => {
   const getCartItems = async () => {
     setIsLoading(true)
     try {
-      const response = await axios.get("https://chobarcart-api.onrender.com/api/v1/users/get-cart-items")
+      const response = await axiosInstance.get("users/get-cart-items")
       setCartItems(response.data.data.cart)
       setIsEmpty(false)
       setIsLoading(false)
@@ -34,7 +35,7 @@ const Cart = () => {
   const removeFromCart = async (productId) => {
     setCartItems(cartItems.filter((item) => item._id !== productId))
     try {
-      const response = await axios.patch(`https://chobarcart-api.onrender.com/api/v1/users/removefrom-cart/${productId}`)
+      const response = await axiosInstance.patch(`users/removefrom-cart/${productId}`)
       dispatch(login(response.data.data))
       toast({
         title: "Success",

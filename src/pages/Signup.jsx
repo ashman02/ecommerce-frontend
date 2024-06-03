@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button.jsx"
 import { Input } from "@/components/ui/input.jsx"
 import { Loader2 } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
+import axiosInstance from "axiosConfig.js"
 
 const Signup = () => {
   const dispatch = useDispatch()
@@ -38,8 +39,8 @@ const Signup = () => {
       if (username) {
         setIsCheckingUsername(true)
         try {
-          const response = await axios.get(
-            `https://chobarcart-api.onrender.com/api/v1/users/check-username/${username}`
+          const response = await axiosInstance.get(
+            `users/check-username/${username}`
           )
           setUsernameMessage(response.data?.message)
           setIsCheckingUsername(false)
@@ -66,7 +67,7 @@ const Signup = () => {
     setIsSubmitting(true)
     dispatch(setSignUp(data))
     try {
-      const response = await axios.post("https://chobarcart-api.onrender.com/api/v1/users/test-email", {
+      const response = await axiosInstance.post("users/test-email", {
         email: data.email,
         username: data.username,
       })

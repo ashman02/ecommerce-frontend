@@ -19,6 +19,7 @@ import { Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { useDispatch } from "react-redux"
 import { login } from "@/redux/features/auth/authSlice"
+import axiosInstance from "axiosConfig"
 
 const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -37,7 +38,7 @@ const SignIn = () => {
   const onSubmit = async (data) => {
     setIsSubmitting(true)
     try {
-      const response = await axios.post("https://chobarcart-api.onrender.com/api/v1/users/login", data)
+      const response = await axiosInstance.post("users/login", data)
       dispatch(login(response.data?.data))
       console.log(response.data.data)
       toast({

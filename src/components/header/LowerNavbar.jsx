@@ -3,7 +3,6 @@ import { Container } from "../index"
 import { NavLink, useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { Button } from "../ui/button"
-import axios from "axios"
 import { useToast } from "../ui/use-toast"
 import { Loader2, Upload, User } from "lucide-react"
 import { useDispatch } from "react-redux"
@@ -18,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Menu } from "lucide-react"
 import { Separator } from "../ui/separator"
+import axiosInstance from "axiosConfig"
 
 const LowerNavbar = () => {
   const authStatus = useSelector((state) => state.auth.status)
@@ -39,7 +39,7 @@ const LowerNavbar = () => {
     setIsAuthenticated(false)
     try {
       navigate("/")
-      const response = await axios.post("https://chobarcart-api.onrender.com/api/v1/users/logout")
+      const response = await axiosInstance.post("users/logout")
       dispatch(logout())
       toast({
         title: "Success",

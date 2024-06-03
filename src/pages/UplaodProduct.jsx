@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useToast } from "@/components/ui/use-toast"
 import { useNavigate } from "react-router-dom"
+import axiosInstance from "axiosConfig"
 
 const UplaodProduct = () => {
   const [categories, setCategories] = useState([])
@@ -26,7 +27,7 @@ const UplaodProduct = () => {
 
   const getCategories = async () => {
     try {
-      const response = await axios.get("https://chobarcart-api.onrender.com/api/v1/category/get-categories")
+      const response = await axiosInstance.get("category/get-categories")
       setCategories(response.data.data)
     } catch (error) {}
   }
@@ -64,8 +65,8 @@ const UplaodProduct = () => {
     }
 
     try {
-      const response = await axios.post(
-        "https://chobarcart-api.onrender.com/api/v1/products/create-product",
+      const response = await axiosInstance.post(
+        "products/create-product",
         formData
       )
       toast({

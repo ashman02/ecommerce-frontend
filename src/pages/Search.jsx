@@ -20,6 +20,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { Switch } from "@/components/ui/switch"
+import axiosInstance from "axiosConfig"
 
 const Search = () => {
   const query = useSelector((state) => state.input.value)
@@ -39,8 +40,8 @@ const Search = () => {
     if (query.length) {
       setIsLoading(true)
       try {
-        const response = await axios.get(
-          `https://chobarcart-api.onrender.com/api/v1/products/get-products?query=${query}&limit=${limit}&page=${page}&sortBy=${sortBy}&sortType=${sortType}&gender=${gender}`
+        const response = await axiosInstance.get(
+          `products/get-products?query=${query}&limit=${limit}&page=${page}&sortBy=${sortBy}&sortType=${sortType}&gender=${gender}`
         )
         setProducts(response.data.data)
         setIsLoading(false)
@@ -57,8 +58,8 @@ const Search = () => {
     if (query.length) {
       setIsLoading(true)
       try {
-        const response = await axios.get(
-          `https://chobarcart-api.onrender.com/api/v1/users/get-users?query=${query}`
+        const response = await axiosInstance.get(
+          `users/get-users?query=${query}`
         )
         setUsers(response.data.data)
         setIsLoading(false)

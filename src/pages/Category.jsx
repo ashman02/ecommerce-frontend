@@ -3,6 +3,7 @@ import { Container, Loader } from "../components"
 import axios from "axios"
 const CategoryCard = lazy(() => import("../components/CategoryCard"))
 import { Skeleton } from "@/components/ui/skeleton"
+import axiosInstance from "axiosConfig"
 
 const Category = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -12,7 +13,7 @@ const Category = () => {
   const fetchCategories = async () => {
     setIsLoading(true)
     try {
-      const response = await axios.get("https://chobarcart-api.onrender.com/api/v1/category/get-categories")
+      const response = await axiosInstance.get("category/get-categories")
       setCategories(response.data.data)
       setIsError(false)
       setIsLoading(false)

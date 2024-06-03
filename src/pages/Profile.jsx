@@ -22,6 +22,7 @@ import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
 import { Edit3, Loader2 } from "lucide-react"
 import { useDebounceCallback } from "usehooks-ts"
+import axiosInstance from "axiosConfig"
 
 const Profile = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -54,7 +55,7 @@ const Profile = () => {
   const getUser = async () => {
     setIsLoading(false)
     try {
-      const response = await axios.get(`https://chobarcart-api.onrender.com/api/v1/users/get-account/${username}`)
+      const response = await axiosInstance.get(`users/get-account/${username}`)
       setUser(response.data.data[0])
       getUserProducts(response.data.data[0]._id)
 
@@ -79,8 +80,8 @@ const Profile = () => {
   const getUserProducts = async (userId) => {
     setIsLoadingProducts(true)
     try {
-      const response = await axios.get(
-        `https://chobarcart-api.onrender.com/api/v1/products/get-products?userId=${userId}`
+      const response = await axiosInstance.get(
+        `products/get-products?userId=${userId}`
       )
       setUserProducts(response.data.data)
     } catch (error) {
@@ -102,8 +103,8 @@ const Profile = () => {
         } else {
           setIsCheckingUsername(true)
           try {
-            const response = await axios.get(
-              `https://chobarcart-api.onrender.com/api/v1/users/check-username/${updatedUsername}`
+            const response = await axiosInstance.get(
+              `users/check-username/${updatedUsername}`
             )
             setUsernameMessage(response.data?.message)
             setIsCheckingUsername(false)
@@ -123,8 +124,8 @@ const Profile = () => {
     try {
       setFollowerCount(followerCount - 1)
       setIsFollowing(false)
-      const response = await axios.delete(
-        `https://chobarcart-api.onrender.com/api/v1/subscriptions/subscribe/${user._id}`
+      const response = await axiosInstance.delete(
+        `subscriptions/subscribe/${user._id}`
       )
       toast({
         title: "Success",
@@ -142,8 +143,8 @@ const Profile = () => {
     try {
       setFollowerCount(followerCount + 1)
       setIsFollowing(true)
-      const response = await axios.post(
-        `https://chobarcart-api.onrender.com/api/v1/subscriptions/subscribe/${user._id}`
+      const response = await axiosInstance.post(
+        `subscriptions/subscribe/${user._id}`
       )
       toast({
         title: "Success",
@@ -166,7 +167,7 @@ const Profile = () => {
   const updateUser = async (data) => {
     setIsUpdatingUser(true)
     try {
-      const response = await axios.patch(`https://chobarcart-api.onrender.com/api/v1/users/update-account`, data)
+      const response = await axiosInstance.patch(`users/update-account`, data)
       navigate(`/${response.data.data.username}`)
       toast({
         title: "Success",
@@ -192,7 +193,7 @@ const Profile = () => {
       formData.append("avatar", pic.current.files[0])
 
       try {
-        const response = await axios.patch(`https://chobarcart-api.onrender.com/api/v1/users/update-avatar`, formData)
+        const response = await axiosInstance.patch(`users/update-avatar`, formData)
         toast({
           title: "Success",
           description: response.data.message,

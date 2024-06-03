@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { useDispatch, useSelector } from "react-redux"
 import { login, logout } from "./redux/features/auth/authSlice.js"
+import axiosInstance from "axiosConfig"
 
 function App() {
   const dispatch = useDispatch()
@@ -18,7 +19,7 @@ function App() {
     const getCurrentUser = async () => {
       setIsFetching(true)
       try {
-        const response = await axios.get("https://chobarcart-api.onrender.com/api/v1/users/current-user")
+        const response = await axiosInstance.get("users/current-user")
         if (response) {
           dispatch(login(response.data?.data))
         } else {

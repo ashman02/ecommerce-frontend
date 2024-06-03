@@ -54,6 +54,7 @@ import {
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
+import axiosInstance from "axiosConfig"
 
 const ProductDetail = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -83,7 +84,7 @@ const ProductDetail = () => {
   const fetchProductDetails = async () => {
     setIsLoading(true)
     try {
-      const response = await axios.get(`https://chobarcart-api.onrender.com/api/v1/products/product/${productId}`)
+      const response = await axiosInstance.get(`products/product/${productId}`)
       setProduct(response.data.data[0])
       if (authStatus) {
         if (userData?.cart?.includes(productId)) {
@@ -104,7 +105,7 @@ const ProductDetail = () => {
 
   const fetchProductComments = async () => {
     try {
-      const response = await axios.get(`https://chobarcart-api.onrender.com/api/v1/comments/${productId}`)
+      const response = await axiosInstance.get(`comments/${productId}`)
       setCommentError(false)
       setComments(response.data.data)
     } catch (error) {
@@ -114,7 +115,7 @@ const ProductDetail = () => {
 
   const fetchProductLikes = async () => {
     try {
-      const response = await axios.get(`https://chobarcart-api.onrender.com/api/v1/likes/product/${productId}`)
+      const response = await axiosInstance.get(`likes/product/${productId}`)
       setLikeCount(response.data.data.totalLikes)
       setIsLiked(response.data.data.isUserLiked)
       if(response.data.data.isUserLiked){
@@ -134,8 +135,8 @@ const ProductDetail = () => {
   const addToCart = async () => {
     setIsInCart(true)
     try {
-      const response = await axios.patch(
-        `https://chobarcart-api.onrender.com/api/v1/users/addto-cart/${productId}`
+      const response = await axiosInstance.patch(
+        `users/addto-cart/${productId}`
       )
       dispatch(login(response.data.data))
       toast({
@@ -154,7 +155,7 @@ const ProductDetail = () => {
     if (commentInput.current.value.length > 10) {
       setIsSubmittingComment(true)
       try {
-        await axios.post(`https://chobarcart-api.onrender.com/api/v1/comments/${productId}`, {
+        await axiosInstance.post(`comments/${productId}`, {
           content: commentInput.current.value,
         })
         commentInput.current.value = ""
@@ -179,8 +180,8 @@ const ProductDetail = () => {
   const deleteComment = async (commentId) => {
     setComments(comments.filter((comment) => comment._id !== commentId))
     try {
-      const response = await axios.delete(
-        `https://chobarcart-api.onrender.com/api/v1/comments/update/${commentId}`
+      const response = await axiosInstance.delete(
+        `comments/update/${commentId}`
       )
       toast({
         title: "Success",
@@ -198,8 +199,8 @@ const ProductDetail = () => {
   const updateComment = async (commentId) => {
     if (editCommentInput.current.value.length > 10) {
       try {
-        const response = await axios.patch(
-          `https://chobarcart-api.onrender.com/api/v1/comments/update/${commentId}`,
+        const response = await axiosInstance.patch(
+          `comments/update/${commentId}`,
           {
             content: editCommentInput.current.value,
           }
@@ -234,8 +235,8 @@ const ProductDetail = () => {
   const updateProduct = async (data) => {
     setIsUpdatingProduct(true)
     try {
-      const response = await axios.patch(
-        `https://chobarcart-api.onrender.com/api/v1/products/product/${product._id}`,
+      const response = await axiosInstance.patch(
+        `products/product/${product._id}`,
         data
       )
       toast({
@@ -257,8 +258,8 @@ const ProductDetail = () => {
   const deleteProduct = async () => {
     setIsDeletingProduct(true)
     try {
-      const response = await axios.delete(
-        `https://chobarcart-api.onrender.com/api/v1/products/product/${product._id}`
+      const response = await axiosInstance.delete(
+        `products/product/${product._id}`
       )
       toast({
         title: "Success",
@@ -284,7 +285,7 @@ const ProductDetail = () => {
     setIsLiked(true)
     setLikeCount(likeCount + 1)
     try {
-      const response = await axios.post(`https://chobarcart-api.onrender.com/api/v1/likes/product/${productId}`)
+      const response = await axiosInstance.post(`likes/product/${productId}`)
       setLikeId(response.data.data._id)
     } catch (error) {
       toast({
@@ -298,7 +299,7 @@ const ProductDetail = () => {
     setIsLiked(false)
     setLikeCount(likeCount - 1)
     try {
-      const response = await axios.delete(`https://chobarcart-api.onrender.com/api/v1/likes/delete-product-like/${likeId}`)
+      const response = await axiosInstance.delete(`likes/delete-product-like/${likeId}`)
     } catch (error) {
       toast({
         title: "Error",

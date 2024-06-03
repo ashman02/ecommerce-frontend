@@ -5,6 +5,7 @@ import axios from "axios"
 import { useDispatch, useSelector } from "react-redux"
 import { login } from "@/redux/features/auth/authSlice"
 import { useToast } from "@/components/ui/use-toast"
+import axiosInstance from "axiosConfig"
 
 const ProductsByCategory = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -19,8 +20,8 @@ const ProductsByCategory = () => {
   const getProducts = async () => {
     setIsLoading(true)
     try {
-      const response = await axios.get(
-        `https://chobarcart-api.onrender.com/api/v1/category/get-products/${categoryId}`
+      const response = await axiosInstance.get(
+        `category/get-products/${categoryId}`
       )
       setProducts(response.data.data[0]?.products)
       setIsError(false)
@@ -37,8 +38,8 @@ const ProductsByCategory = () => {
 
   const addToCart = async (productId) => {
     try {
-      const response = await axios.patch(
-        `https://chobarcart-api.onrender.com/api/v1/users/addto-cart/${productId}`
+      const response = await axiosInstance.patch(
+        `users/addto-cart/${productId}`
       )
       dispatch(login(response.data.data))
       toast({
