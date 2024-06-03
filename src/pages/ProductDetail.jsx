@@ -277,6 +277,10 @@ const ProductDetail = () => {
   }
 
   const handleToggleLike = async () => {
+    if(!authStatus){
+      navigate('/sign-in')
+      return
+    }
     setIsLiked(true)
     setLikeCount(likeCount + 1)
     try {
