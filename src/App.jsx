@@ -18,7 +18,7 @@ function App() {
     const getCurrentUser = async () => {
       setIsFetching(true)
       try {
-        const response = await axios.get("/api/v1/users/current-user")
+        const response = await axios.get("https://chobarcart-api.onrender.com/api/v1/users/current-user")
         if (response) {
           dispatch(login(response.data?.data))
         } else {
