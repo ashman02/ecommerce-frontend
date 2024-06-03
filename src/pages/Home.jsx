@@ -24,7 +24,7 @@ const Home = () => {
   const getCategories = async () => {
     setIsLoading(true)
     try {
-      const response = await axios.get(import.meta.env.API_URL + "category/get-categories")
+      const response = await axios.get("https://chobarcart-api.onrender.com/api/v1/category/get-categories")
       setCategories(response.data.data)
       setIsLoading(false)
     } catch (error) {
@@ -35,7 +35,7 @@ const Home = () => {
   const getProducts = async () => {
     setIsProductLoading(true)
     try {
-      const response = await axios.get("/api/v1/products/home-products")
+      const response = await axios.get("https://chobarcart-api.onrender.com/api/v1/products/home-products")
       setProducts(response.data.data)
       setIsProductLoading(false)
     } catch (error) {
@@ -51,7 +51,7 @@ const Home = () => {
   const addToCart = async (productId) => {
     try {
       const response = await axios.patch(
-        `/api/v1/users/addto-cart/${productId}`
+        `https://chobarcart-api.onrender.com/api/v1/users/addto-cart/${productId}`
       )
       dispatch(login(response.data.data))
       toast({

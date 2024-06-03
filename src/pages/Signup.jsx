@@ -39,7 +39,7 @@ const Signup = () => {
         setIsCheckingUsername(true)
         try {
           const response = await axios.get(
-            `/api/v1/users/check-username/${username}`
+            `https://chobarcart-api.onrender.com/api/v1/users/check-username/${username}`
           )
           setUsernameMessage(response.data?.message)
           setIsCheckingUsername(false)
@@ -66,7 +66,7 @@ const Signup = () => {
     setIsSubmitting(true)
     dispatch(setSignUp(data))
     try {
-      const response = await axios.post("/api/v1/users/test-email", {
+      const response = await axios.post("https://chobarcart-api.onrender.com/api/v1/users/test-email", {
         email: data.email,
         username: data.username,
       })

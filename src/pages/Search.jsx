@@ -40,7 +40,7 @@ const Search = () => {
       setIsLoading(true)
       try {
         const response = await axios.get(
-          `/api/v1/products/get-products?query=${query}&limit=${limit}&page=${page}&sortBy=${sortBy}&sortType=${sortType}&gender=${gender}`
+          `https://chobarcart-api.onrender.com/api/v1/products/get-products?query=${query}&limit=${limit}&page=${page}&sortBy=${sortBy}&sortType=${sortType}&gender=${gender}`
         )
         setProducts(response.data.data)
         setIsLoading(false)
@@ -58,7 +58,7 @@ const Search = () => {
       setIsLoading(true)
       try {
         const response = await axios.get(
-          `/api/v1/users/get-users?query=${query}`
+          `https://chobarcart-api.onrender.com/api/v1/users/get-users?query=${query}`
         )
         setUsers(response.data.data)
         setIsLoading(false)

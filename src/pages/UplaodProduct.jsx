@@ -26,7 +26,7 @@ const UplaodProduct = () => {
 
   const getCategories = async () => {
     try {
-      const response = await axios.get("/api/v1/category/get-categories")
+      const response = await axios.get("https://chobarcart-api.onrender.com/api/v1/category/get-categories")
       setCategories(response.data.data)
     } catch (error) {}
   }
@@ -65,7 +65,7 @@ const UplaodProduct = () => {
 
     try {
       const response = await axios.post(
-        "/api/v1/products/create-product",
+        "https://chobarcart-api.onrender.com/api/v1/products/create-product",
         formData
       )
       toast({

@@ -54,7 +54,7 @@ const Profile = () => {
   const getUser = async () => {
     setIsLoading(false)
     try {
-      const response = await axios.get(`/api/v1/users/get-account/${username}`)
+      const response = await axios.get(`https://chobarcart-api.onrender.com/api/v1/users/get-account/${username}`)
       setUser(response.data.data[0])
       getUserProducts(response.data.data[0]._id)
 
@@ -80,7 +80,7 @@ const Profile = () => {
     setIsLoadingProducts(true)
     try {
       const response = await axios.get(
-        `/api/v1/products/get-products?userId=${userId}`
+        `https://chobarcart-api.onrender.com/api/v1/products/get-products?userId=${userId}`
       )
       setUserProducts(response.data.data)
     } catch (error) {
@@ -103,7 +103,7 @@ const Profile = () => {
           setIsCheckingUsername(true)
           try {
             const response = await axios.get(
-              `/api/v1/users/check-username/${updatedUsername}`
+              `https://chobarcart-api.onrender.com/api/v1/users/check-username/${updatedUsername}`
             )
             setUsernameMessage(response.data?.message)
             setIsCheckingUsername(false)
@@ -124,7 +124,7 @@ const Profile = () => {
       setFollowerCount(followerCount - 1)
       setIsFollowing(false)
       const response = await axios.delete(
-        `/api/v1/subscriptions/subscribe/${user._id}`
+        `https://chobarcart-api.onrender.com/api/v1/subscriptions/subscribe/${user._id}`
       )
       toast({
         title: "Success",
@@ -143,7 +143,7 @@ const Profile = () => {
       setFollowerCount(followerCount + 1)
       setIsFollowing(true)
       const response = await axios.post(
-        `/api/v1/subscriptions/subscribe/${user._id}`
+        `https://chobarcart-api.onrender.com/api/v1/subscriptions/subscribe/${user._id}`
       )
       toast({
         title: "Success",
@@ -166,7 +166,7 @@ const Profile = () => {
   const updateUser = async (data) => {
     setIsUpdatingUser(true)
     try {
-      const response = await axios.patch(`/api/v1/users/update-account`, data)
+      const response = await axios.patch(`https://chobarcart-api.onrender.com/api/v1/users/update-account`, data)
       navigate(`/${response.data.data.username}`)
       toast({
         title: "Success",
@@ -192,7 +192,7 @@ const Profile = () => {
       formData.append("avatar", pic.current.files[0])
 
       try {
-        const response = await axios.patch(`/api/v1/users/update-avatar`, formData)
+        const response = await axios.patch(`https://chobarcart-api.onrender.com/api/v1/users/update-avatar`, formData)
         toast({
           title: "Success",
           description: response.data.message,

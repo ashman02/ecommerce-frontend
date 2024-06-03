@@ -37,7 +37,7 @@ const SignIn = () => {
   const onSubmit = async (data) => {
     setIsSubmitting(true)
     try {
-      const response = await axios.post("/api/v1/users/login", data)
+      const response = await axios.post("https://chobarcart-api.onrender.com/api/v1/users/login", data)
       dispatch(login(response.data?.data))
       toast({
         title: "Success",

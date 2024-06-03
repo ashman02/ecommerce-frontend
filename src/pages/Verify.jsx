@@ -46,7 +46,7 @@ const Verify = () => {
     if (data.otp == verifyCode) {
       console.log("I am trying")
       try {
-        const response = await axios.post("/api/v1/users/register", userData)
+        const response = await axios.post("https://chobarcart-api.onrender.com/api/v1/users/register", userData)
         toast({
           title: "Success",
           description: response.data?.message,

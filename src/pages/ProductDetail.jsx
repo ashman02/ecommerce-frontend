@@ -83,7 +83,7 @@ const ProductDetail = () => {
   const fetchProductDetails = async () => {
     setIsLoading(true)
     try {
-      const response = await axios.get(`/api/v1/products/product/${productId}`)
+      const response = await axios.get(`https://chobarcart-api.onrender.com/api/v1/products/product/${productId}`)
       setProduct(response.data.data[0])
       if (authStatus) {
         if (userData?.cart?.includes(productId)) {
@@ -104,7 +104,7 @@ const ProductDetail = () => {
 
   const fetchProductComments = async () => {
     try {
-      const response = await axios.get(`/api/v1/comments/${productId}`)
+      const response = await axios.get(`https://chobarcart-api.onrender.com/api/v1/comments/${productId}`)
       setCommentError(false)
       setComments(response.data.data)
     } catch (error) {
@@ -114,7 +114,7 @@ const ProductDetail = () => {
 
   const fetchProductLikes = async () => {
     try {
-      const response = await axios.get(`/api/v1/likes/product/${productId}`)
+      const response = await axios.get(`https://chobarcart-api.onrender.com/api/v1/likes/product/${productId}`)
       setLikeCount(response.data.data.totalLikes)
       setIsLiked(response.data.data.isUserLiked)
       if(response.data.data.isUserLiked){
@@ -135,7 +135,7 @@ const ProductDetail = () => {
     setIsInCart(true)
     try {
       const response = await axios.patch(
-        `/api/v1/users/addto-cart/${productId}`
+        `https://chobarcart-api.onrender.com/api/v1/users/addto-cart/${productId}`
       )
       dispatch(login(response.data.data))
       toast({
@@ -154,7 +154,7 @@ const ProductDetail = () => {
     if (commentInput.current.value.length > 10) {
       setIsSubmittingComment(true)
       try {
-        await axios.post(`/api/v1/comments/${productId}`, {
+        await axios.post(`https://chobarcart-api.onrender.com/api/v1/comments/${productId}`, {
           content: commentInput.current.value,
         })
         commentInput.current.value = ""
@@ -180,7 +180,7 @@ const ProductDetail = () => {
     setComments(comments.filter((comment) => comment._id !== commentId))
     try {
       const response = await axios.delete(
-        `/api/v1/comments/update/${commentId}`
+        `https://chobarcart-api.onrender.com/api/v1/comments/update/${commentId}`
       )
       toast({
         title: "Success",
@@ -199,7 +199,7 @@ const ProductDetail = () => {
     if (editCommentInput.current.value.length > 10) {
       try {
         const response = await axios.patch(
-          `/api/v1/comments/update/${commentId}`,
+          `https://chobarcart-api.onrender.com/api/v1/comments/update/${commentId}`,
           {
             content: editCommentInput.current.value,
           }
@@ -235,7 +235,7 @@ const ProductDetail = () => {
     setIsUpdatingProduct(true)
     try {
       const response = await axios.patch(
-        `/api/v1/products/product/${product._id}`,
+        `https://chobarcart-api.onrender.com/api/v1/products/product/${product._id}`,
         data
       )
       toast({
@@ -258,7 +258,7 @@ const ProductDetail = () => {
     setIsDeletingProduct(true)
     try {
       const response = await axios.delete(
-        `/api/v1/products/product/${product._id}`
+        `https://chobarcart-api.onrender.com/api/v1/products/product/${product._id}`
       )
       toast({
         title: "Success",
@@ -280,7 +280,7 @@ const ProductDetail = () => {
     setIsLiked(true)
     setLikeCount(likeCount + 1)
     try {
-      const response = await axios.post(`/api/v1/likes/product/${productId}`)
+      const response = await axios.post(`https://chobarcart-api.onrender.com/api/v1/likes/product/${productId}`)
       setLikeId(response.data.data._id)
     } catch (error) {
       toast({
@@ -294,7 +294,7 @@ const ProductDetail = () => {
     setIsLiked(false)
     setLikeCount(likeCount - 1)
     try {
-      const response = await axios.delete(`/api/v1/likes/delete-product-like/${likeId}`)
+      const response = await axios.delete(`https://chobarcart-api.onrender.com/api/v1/likes/delete-product-like/${likeId}`)
     } catch (error) {
       toast({
         title: "Error",

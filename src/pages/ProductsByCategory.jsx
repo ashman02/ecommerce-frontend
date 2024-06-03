@@ -20,7 +20,7 @@ const ProductsByCategory = () => {
     setIsLoading(true)
     try {
       const response = await axios.get(
-        `/api/v1/category/get-products/${categoryId}`
+        `https://chobarcart-api.onrender.com/api/v1/category/get-products/${categoryId}`
       )
       setProducts(response.data.data[0]?.products)
       setIsError(false)
@@ -38,7 +38,7 @@ const ProductsByCategory = () => {
   const addToCart = async (productId) => {
     try {
       const response = await axios.patch(
-        `/api/v1/users/addto-cart/${productId}`
+        `https://chobarcart-api.onrender.com/api/v1/users/addto-cart/${productId}`
       )
       dispatch(login(response.data.data))
       toast({

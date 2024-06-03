@@ -17,7 +17,7 @@ const Cart = () => {
   const getCartItems = async () => {
     setIsLoading(true)
     try {
-      const response = await axios.get("/api/v1/users/get-cart-items")
+      const response = await axios.get("https://chobarcart-api.onrender.com/api/v1/users/get-cart-items")
       setCartItems(response.data.data.cart)
       setIsEmpty(false)
       setIsLoading(false)
@@ -34,7 +34,7 @@ const Cart = () => {
   const removeFromCart = async (productId) => {
     setCartItems(cartItems.filter((item) => item._id !== productId))
     try {
-      const response = await axios.patch(`/api/v1/users/removefrom-cart/${productId}`)
+      const response = await axios.patch(`https://chobarcart-api.onrender.com/api/v1/users/removefrom-cart/${productId}`)
       dispatch(login(response.data.data))
       toast({
         title: "Success",
