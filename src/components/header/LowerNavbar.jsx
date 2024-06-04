@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Menu } from "lucide-react"
 import { Separator } from "../ui/separator"
-import axiosInstance from "axiosConfig"
+import axiosInstance from "@/utils/axiosConfig"
 
 const LowerNavbar = () => {
   const authStatus = useSelector((state) => state.auth.status)

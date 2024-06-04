@@ -5,7 +5,7 @@ import axios from "axios"
 import { useDispatch, useSelector } from "react-redux"
 import { login } from "@/redux/features/auth/authSlice"
 import { useToast } from "@/components/ui/use-toast"
-import axiosInstance from "axiosConfig"
+import axiosInstance from "@/utils/axiosConfig"
 
 const ProductsByCategory = () => {
   const [isLoading, setIsLoading] = useState(false)

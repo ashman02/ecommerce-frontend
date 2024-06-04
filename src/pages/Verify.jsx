@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/input-otp"
 import { Loader2 } from "lucide-react"
 import { useNavigate } from "react-router-dom"
-import axiosInstance from "axiosConfig"
+import axiosInstance from "@/utils/axiosConfig"
 
 const Verify = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)

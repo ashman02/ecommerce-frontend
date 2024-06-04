@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { useDispatch, useSelector } from "react-redux"
 import { login, logout } from "./redux/features/auth/authSlice.js"
-import axiosInstance from "axiosConfig"
+import axiosInstance from "@/utils/axiosConfig"
 
 function App() {
   const dispatch = useDispatch()

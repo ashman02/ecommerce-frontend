@@ -4,7 +4,7 @@ import axios from "axios"
 import { useToast } from "@/components/ui/use-toast"
 import { useDispatch } from "react-redux"
 import { login } from "@/redux/features/auth/authSlice"
-import axiosInstance from "axiosConfig"
+import axiosInstance from "@/utils/axiosConfig"
 
 
 const Cart = () => {

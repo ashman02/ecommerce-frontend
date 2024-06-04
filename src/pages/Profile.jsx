@@ -22,7 +22,7 @@ import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
 import { Edit3, Loader2 } from "lucide-react"
 import { useDebounceCallback } from "usehooks-ts"
-import axiosInstance from "axiosConfig"
+import axiosInstance from "@/utils/axiosConfig"
 
 const Profile = () => {
   const [isLoading, setIsLoading] = useState(false)

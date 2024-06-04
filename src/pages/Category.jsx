@@ -3,7 +3,7 @@ import { Container, Loader } from "../components"
 import axios from "axios"
 const CategoryCard = lazy(() => import("../components/CategoryCard"))
 import { Skeleton } from "@/components/ui/skeleton"
-import axiosInstance from "axiosConfig"
+import axiosInstance from "@/utils/axiosConfig"
 
 const Category = () => {
   const [isLoading, setIsLoading] = useState(false)

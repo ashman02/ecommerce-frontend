@@ -19,7 +19,7 @@ import { Loader2 } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { useDispatch } from "react-redux"
 import { login } from "@/redux/features/auth/authSlice"
-import axiosInstance from "axiosConfig"
+import axiosInstance from "@/utils/axiosConfig"
 
 const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)

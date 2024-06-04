@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { useToast } from "@/components/ui/use-toast"
 import { useNavigate } from "react-router-dom"
-import axiosInstance from "axiosConfig"
+import axiosInstance from "@/utils/axiosConfig"
 
 const UplaodProduct = () => {
   const [categories, setCategories] = useState([])

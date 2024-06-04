@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { login } from "@/redux/features/auth/authSlice"
 import { useToast } from "@/components/ui/use-toast"
 import { Skeleton } from "@/components/ui/skeleton"
-import axiosInstance from "axiosConfig"
+import axiosInstance from "@/utils/axiosConfig"
 
 const HomeCategory = lazy(() => import("../components/HomeCategory"))
 

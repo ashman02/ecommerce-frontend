@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button.jsx"
 import { Input } from "@/components/ui/input.jsx"
 import { Loader2 } from "lucide-react"
 import { useToast } from "@/components/ui/use-toast"
-import axiosInstance from "axiosConfig.js"
+import axiosInstance from "@/utils/axiosConfig.js"
 
 const Signup = () => {
   const dispatch = useDispatch()
