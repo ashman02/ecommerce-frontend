@@ -2,7 +2,6 @@ import { Outlet, useLocation } from "react-router-dom"
 import { Footer, Loader, Navbar } from "./components"
 import { Toaster } from "./components/ui/toaster"
 import { useEffect, useState } from "react"
-import axios from "axios"
 import { useDispatch, useSelector } from "react-redux"
 import { login, logout } from "./redux/features/auth/authSlice.js"
 import axiosInstance from "@/utils/axiosConfig"
@@ -32,7 +31,7 @@ function App() {
       }
     }
     getCurrentUser()
-  }, [auth])
+  }, [auth, dispatch])
 
   if (isFetching) {
     return (

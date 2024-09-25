@@ -1,8 +1,7 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -11,7 +10,6 @@ import {
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signInSchema } from "@/schemas/sign-in"
-import axios from "axios"
 import { useToast } from "@/components/ui/use-toast"
 import { Button } from "@/components/ui/button"
 import { Link, useNavigate } from "react-router-dom"
@@ -40,7 +38,8 @@ const SignIn = () => {
     try {
       const response = await axiosInstance.post("users/login", data)
       dispatch(login(response.data?.data))
-      console.log(response.data.data)
+      localStorage.setItem("accessToken", response.data.data.accessToken)
+      localStorage.setItem("refreshToken", response.data.data.refreshToken)
       toast({
         title: "Success",
         description: response.data?.message,
@@ -114,7 +113,7 @@ const SignIn = () => {
             Sign up
           </Link>
           <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-            If you don't have an existing account click above to create one.
+            If you don&apos;t have an existing account click above to create one.
           </p>
         </div>
       </div>
